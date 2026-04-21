@@ -1,0 +1,16 @@
+name: portfolio-project-app
+
+env:
+  APP_ENV: production
+  APP_DEBUG: false
+  LOG_CHANNEL: stack
+
+php: "8.2"
+
+build:
+  - "composer install --no-dev --optimize-autoloader"
+
+start:
+  - "php artisan migrate --force"
+  - "php artisan cache:clear"
+  - "php artisan config:cache"

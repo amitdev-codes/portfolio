@@ -1,0 +1,19 @@
+name: Laravel Cloud Deploy
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Deploy to Laravel Cloud
+        uses: laravel/cloud-action@v1
+        with:
+          api-token: ${{ secrets.LARAVEL_CLOUD_API_TOKEN }}
