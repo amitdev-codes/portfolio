@@ -5,7 +5,7 @@ env:
   APP_DEBUG: false
   LOG_CHANNEL: stack
 
-php: "8.2"
+php: "8.4"
 
 build:
   - "composer install --no-dev --optimize-autoloader"
