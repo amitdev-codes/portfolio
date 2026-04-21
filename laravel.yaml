@@ -1,11 +1,10 @@
-name: my-portfoloi-app
+name: my-laravel-app
+
+runtime: php-8.4
 
 env:
   APP_ENV: production
   APP_DEBUG: false
-  LOG_CHANNEL: stack
-
-php: "8.4"    # <- Change this from 8.2 to 8.4
 
 build:
   - "composer install --no-dev --optimize-autoloader"
