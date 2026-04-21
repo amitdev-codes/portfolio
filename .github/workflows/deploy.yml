@@ -17,3 +17,4 @@ jobs:
         uses: laravel/cloud-action@v1
         with:
           api-token: ${{ secrets.LARAVEL_CLOUD_API_TOKEN }}
+          runtime: php-8.4
