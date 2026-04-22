@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
         $this->createSpecialUsers();
 
         // Create 10,000 regular users
-        $this->createBulkUsers(10000);
+        $this->createBulkUsers(10);
 
         $this->command->info('10,000+ users seeded successfully!');
     }
