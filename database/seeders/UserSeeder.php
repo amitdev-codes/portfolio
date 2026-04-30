@@ -1,14 +1,9 @@
 <?php
-
-// database/seeders/UserSeeder.php
-
 namespace Database\Seeders;
-
 use App\Models\User;
-use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
+
 
 class UserSeeder extends Seeder
 {
@@ -60,7 +55,6 @@ class UserSeeder extends Seeder
 
     private function createBulkUsers(int $count): void
     {
-        $faker = Faker::create();
         $roles = ['user', 'developer', 'admin']; // Skip superadmin for bulk
 
         User::factory($count)->create()->each(function ($user) use ($roles) {

@@ -10,18 +10,15 @@ import './LandingModule.css';
 // eslint-disable-next-line import/order
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
+
 export default function LandingPage({ projects }: { projects: any }) {
     const {
         isScrolled,
         darkMode,
         setDarkMode,
         cursorRef,
-        scrollRefs,
         handleCursorHover,
         downloadCV,
-        scrollProject,
-        expandedProject,
-        setExpandedProject,
     } = useLandingPage();
 
     const dm = darkMode;
@@ -77,24 +74,18 @@ export default function LandingPage({ projects }: { projects: any }) {
 
             <ProjectsSection
                 projects={projects}
-                scrollProject={scrollProject}
-                darkMode={darkMode}
-                expandedProject={expandedProject}
-                setExpandedProject={setExpandedProject}
-                scrollRefs={scrollRefs}
-                handleCursorHover={handleCursorHover}
                 bg={bg}
                 bgCard={bgCard}
                 textPrimary={textPrimary}
                 textMuted={textMuted}
-                borderColor={borderColor}
             />
             <TechTalkSection
                 darkMode={darkMode}
                 textPrimary={textPrimary}
                 textMuted={textMuted}
                 bg={bg}
-                cursorHover={handleCursorHover}
+                bgWhite={bgWhite}
+                handleCursorHover={handleCursorHover}
                 bgCard={bgCard}
                 borderColor={borderColor}
             />

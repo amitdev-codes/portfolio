@@ -44,7 +44,7 @@ interface Project {
     link?: string | null;
     is_featured: boolean;
     sort_order: number;
-    cover_image?: File | null;
+    cover_image?: string | null;
     screenshots?: Array<{ id: number; url: string }>;
     media?: Array<{
         collection_name: string;
@@ -55,22 +55,7 @@ interface Project {
 interface Props {
     project?: Project;
 }
-type ProjectForm = {
-    title: string;
-    slug: string;
-    short_description: string;
-    full_description: string;
-    emoji: string;
-    color: string;
-    accent: string;
-    tech: string[];
-    link: string;
-    is_featured: boolean;
-    sort_order: number;
 
-    cover_image: File | null;
-    screenshots: File[];
-};
 export default function ProjectForm({ project }: Props) {
     // Initialize tech as array
     const initialTech = Array.isArray(project?.tech)
@@ -99,23 +84,11 @@ export default function ProjectForm({ project }: Props) {
     // Tech stack state management
     const [techInput, setTechInput] = useState('');
     const [techList, setTechList] = useState<string[]>(initialTech);
-
-    // Update techList when data.tech changes
-    // useEffect(() => {
-    //     if (Array.isArray(data.tech)) {
-    //         setTechList(data.tech);
-    //     }
-    // }, [data.tech]);
-
     // Track if errors have been shown to prevent duplicate toasts
     const [shownErrors, setShownErrors] = useState<Set<string>>(new Set());
-
-    // ✅ Replace with this:
-
-
     // Image preview states
     const [coverImagePreview, setCoverImagePreview] = useState<string | null>(
-        null,
+        project?.cover_image || null,
     );
     const [coverFile, setCoverFile] = useState<File | null>(null);
 
@@ -127,11 +100,6 @@ export default function ProjectForm({ project }: Props) {
     useEffect(() => {
         if (!project) {
             return;
-        }
-
-        if (project.cover_image) {
-
-            setCoverImagePreview(project.cover_image);
         }
 
         if (project.screenshots) {
@@ -532,12 +500,13 @@ export default function ProjectForm({ project }: Props) {
                                                 : file;
 
                                             setCoverFile(f);
-
                                             setData('cover_image', f);
 
                                             if (f instanceof File) {
+                                                const previewUrl =
+                                                    URL.createObjectURL(f);
                                                 setCoverImagePreview(
-                                                    URL.createObjectURL(f),
+                                                    previewUrl,
                                                 );
                                             }
                                         }}

@@ -1,14 +1,5 @@
 import {
-    ChevronDown,
-    Github,
-    Linkedin,
-    Mail,
-    Download,
     ArrowUpRight,
-    MapPin,
-    Code2,
-    Sun,
-    Moon,
 } from 'lucide-react';
 interface TechTalkSectionProps {
     darkMode: boolean;
@@ -119,12 +110,12 @@ export default function TechTalkSection({
                                 </span>
                             </div>
                             <h3
-                                className={`text-base font-black ${textPrimary} mb-3 flex-grow transition-colors group-hover:text-indigo-600`}
+                                className={`text-base font-black ${textPrimary} mb-3 grow transition-colors group-hover:text-indigo-600`}
                             >
                                 {talk.title}
                             </h3>
                             <p
-                                className={`${textMuted} mb-6 flex-grow text-sm leading-relaxed`}
+                                className={`${textMuted} mb-6 grow text-sm leading-relaxed`}
                             >
                                 {talk.excerpt}
                             </p>
