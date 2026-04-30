@@ -19,15 +19,19 @@ class HomeController extends Controller
                 $screenshots = $project->getMedia('project_screenshots');
                 $images = [];
                 if ($coverImage) {
-                    $images[] = $coverImage->getUrl();
+                    $images[] = asset('images/'.$coverImage->file_name);
                 }
+
+                // Then all screenshots
                 $screenshots->each(function ($media) use (&$images) {
-                    $images[] = $media->getUrl();
+                    $images[] = asset('images/'.$media->file_name);
                 });
+
+                // Fallback if no images
                 if (empty($images)) {
                     $defaultImage = $project->getFirstMedia('default_images');
                     if ($defaultImage) {
-                        $images[] = $defaultImage->getUrl();
+                        $images[] = asset('images/'.$defaultImage->file_name);
                     }
                 }
 
