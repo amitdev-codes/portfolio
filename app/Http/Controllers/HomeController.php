@@ -18,20 +18,21 @@ class HomeController extends Controller
                 $coverImage = $project->getMedia('cover_image')->first();
                 $screenshots = $project->getMedia('project_screenshots');
                 $images = [];
+                // Always add cover image first (if exists)
                 if ($coverImage) {
-                    $images[] = asset('images/'.$coverImage->file_name);
+                    $images[] = $coverImage->getUrl();
                 }
 
-                // Then all screenshots
+                // Add all screenshots after cover
                 $screenshots->each(function ($media) use (&$images) {
-                    $images[] = asset('images/'.$media->file_name);
+                    $images[] = $media->getUrl();
                 });
 
-                // Fallback if no images
+                // Fallback: if no cover or screenshots, use any default image
                 if (empty($images)) {
                     $defaultImage = $project->getFirstMedia('default_images');
                     if ($defaultImage) {
-                        $images[] = asset('images/'.$defaultImage->file_name);
+                        $images[] = $defaultImage->getUrl();
                     }
                 }
 
