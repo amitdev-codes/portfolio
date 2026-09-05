@@ -177,7 +177,7 @@ export default function HeroSection({
                                 </span>
                             )}
                             {is_available && (
-                                <span className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/30">
+                                <span className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-600">
                                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
                                     {availability_text}
                                 </span>
@@ -259,7 +259,7 @@ export default function HeroSection({
                         {/* Profile image — compact circle with ring */}
                         <div className="relative">
                             {/* Rotating ring accent */}
-                            <div className="absolute inset-0 animate-[spin_18s_linear_infinite] rounded-full border-2 border-dashed border-indigo-300 dark:border-indigo-700" />
+                            <div className="absolute inset-0 animate-[spin_18s_linear_infinite] rounded-full border-2 border-dashed border-indigo-300" />
                             {/* Solid inner ring */}
                             <div className="absolute inset-2 rounded-full border border-indigo-500/30" />
 
