@@ -1,9 +1,7 @@
 name: Deploy Laravel
-
 on:
   push:
-    branches: [ main]
-
+    branches: [ main ]
 jobs:
   deploy-own-server:
     if: github.ref == 'refs/heads/main'
@@ -13,12 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Build frontend assets using Docker Node container
-      - name: Build Frontend Assets (Yarn)
-        run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "yarn install && yarn build"
-
-      # 2. Install Composer dependencies using Docker Composer container
+      # 1. Install Composer dependencies FIRST (Wayfinder needs vendor/ + artisan)
       - name: Install Composer Dependencies
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app php:8.4-cli-alpine sh -c "apk add --no-cache git unzip \
@@ -28,11 +21,22 @@ jobs:
             && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
             && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts"
 
-      # 3. Fix ownership of files created by the root-run composer container
-      - name: Fix file ownership
+      # 2. Fix ownership of files created by the root-run composer container
+      - name: Fix file ownership after composer
         run: sudo chown -R $(id -u):$(id -g) .
 
-      # 4. Package pre-built app (includes compiled public/build and vendor directory)
+      # 3. Build frontend assets — needs PHP available for wayfinder:generate
+      - name: Build Frontend Assets (Yarn)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar \
+            && ln -sf /usr/bin/php84 /usr/bin/php \
+            && yarn install && yarn build"
+
+      # 4. Fix ownership again in case the node container wrote root-owned files
+      - name: Fix file ownership after build
+        run: sudo chown -R $(id -u):$(id -g) .
+
+      # 5. Package pre-built app (includes compiled public/build and vendor directory)
       - name: Package build for transfer
         run: |
           rm -rf .git .github node_modules
@@ -59,8 +63,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH }} && php artisan down || true
             mkdir -p ${{ secrets.DEPLOY_PATH }}
+            cd ${{ secrets.DEPLOY_PATH }} && php artisan down || true
             rm -rf ${{ secrets.DEPLOY_PATH }}/public/build
             tar -xzf ~/deploy.tar.gz -C ${{ secrets.DEPLOY_PATH }}
             rm -f ~/deploy.tar.gz
