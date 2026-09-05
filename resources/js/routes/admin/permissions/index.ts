@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\UserManagement\PermissionController::index
 * @see app/Http/Controllers/UserManagement/PermissionController.php:18
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::index
+* @see app/Http/Controllers/UserManagement/PermissionController.php:18
+* @route '/admin/permissions'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::index
+* @see app/Http/Controllers/UserManagement/PermissionController.php:18
+* @route '/admin/permissions'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::index
+* @see app/Http/Controllers/UserManagement/PermissionController.php:18
+* @route '/admin/permissions'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\UserManagement\PermissionController::create
@@ -88,6 +125,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\UserManagement\PermissionController::create
+* @see app/Http/Controllers/UserManagement/PermissionController.php:26
+* @route '/admin/permissions/create'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::create
+* @see app/Http/Controllers/UserManagement/PermissionController.php:26
+* @route '/admin/permissions/create'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::create
+* @see app/Http/Controllers/UserManagement/PermissionController.php:26
+* @route '/admin/permissions/create'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\UserManagement\PermissionController::store
 * @see app/Http/Controllers/UserManagement/PermissionController.php:34
 * @route '/admin/permissions'
@@ -120,6 +194,28 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::store
+* @see app/Http/Controllers/UserManagement/PermissionController.php:34
+* @route '/admin/permissions'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::store
+* @see app/Http/Controllers/UserManagement/PermissionController.php:34
+* @route '/admin/permissions'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\UserManagement\PermissionController::show
@@ -190,6 +286,43 @@ show.head = (args: { permission: number | { id: number } } | [permission: number
 })
 
 /**
+* @see \App\Http\Controllers\UserManagement\PermissionController::show
+* @see app/Http/Controllers/UserManagement/PermissionController.php:73
+* @route '/admin/permissions/{permission}'
+*/
+const showForm = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::show
+* @see app/Http/Controllers/UserManagement/PermissionController.php:73
+* @route '/admin/permissions/{permission}'
+*/
+showForm.get = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::show
+* @see app/Http/Controllers/UserManagement/PermissionController.php:73
+* @route '/admin/permissions/{permission}'
+*/
+showForm.head = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
+
+/**
 * @see \App\Http\Controllers\UserManagement\PermissionController::edit
 * @see app/Http/Controllers/UserManagement/PermissionController.php:81
 * @route '/admin/permissions/{permission}/edit'
@@ -256,6 +389,43 @@ edit.head = (args: { permission: number | { id: number } } | [permission: number
     url: edit.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::edit
+* @see app/Http/Controllers/UserManagement/PermissionController.php:81
+* @route '/admin/permissions/{permission}/edit'
+*/
+const editForm = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::edit
+* @see app/Http/Controllers/UserManagement/PermissionController.php:81
+* @route '/admin/permissions/{permission}/edit'
+*/
+editForm.get = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::edit
+* @see app/Http/Controllers/UserManagement/PermissionController.php:81
+* @route '/admin/permissions/{permission}/edit'
+*/
+editForm.head = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\UserManagement\PermissionController::update
@@ -326,6 +496,53 @@ update.patch = (args: { permission: number | { id: number } } | [permission: num
 })
 
 /**
+* @see \App\Http\Controllers\UserManagement\PermissionController::update
+* @see app/Http/Controllers/UserManagement/PermissionController.php:89
+* @route '/admin/permissions/{permission}'
+*/
+const updateForm = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::update
+* @see app/Http/Controllers/UserManagement/PermissionController.php:89
+* @route '/admin/permissions/{permission}'
+*/
+updateForm.put = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::update
+* @see app/Http/Controllers/UserManagement/PermissionController.php:89
+* @route '/admin/permissions/{permission}'
+*/
+updateForm.patch = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PATCH',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
+
+/**
 * @see \App\Http\Controllers\UserManagement\PermissionController::destroy
 * @see app/Http/Controllers/UserManagement/PermissionController.php:105
 * @route '/admin/permissions/{permission}'
@@ -384,6 +601,38 @@ destroy.delete = (args: { permission: number | { id: number } } | [permission: n
 })
 
 /**
+* @see \App\Http\Controllers\UserManagement\PermissionController::destroy
+* @see app/Http/Controllers/UserManagement/PermissionController.php:105
+* @route '/admin/permissions/{permission}'
+*/
+const destroyForm = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::destroy
+* @see app/Http/Controllers/UserManagement/PermissionController.php:105
+* @route '/admin/permissions/{permission}'
+*/
+destroyForm.delete = (args: { permission: number | { id: number } } | [permission: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
+
+/**
 * @see \App\Http\Controllers\UserManagement\PermissionController::bulkDestroy
 * @see app/Http/Controllers/UserManagement/PermissionController.php:121
 * @route '/admin/permissions/bulk-destroy'
@@ -416,6 +665,28 @@ bulkDestroy.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: bulkDestroy.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::bulkDestroy
+* @see app/Http/Controllers/UserManagement/PermissionController.php:121
+* @route '/admin/permissions/bulk-destroy'
+*/
+const bulkDestroyForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: bulkDestroy.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserManagement\PermissionController::bulkDestroy
+* @see app/Http/Controllers/UserManagement/PermissionController.php:121
+* @route '/admin/permissions/bulk-destroy'
+*/
+bulkDestroyForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: bulkDestroy.url(options),
+    method: 'post',
+})
+
+bulkDestroy.form = bulkDestroyForm
 
 const permissions = {
     index: Object.assign(index, index),

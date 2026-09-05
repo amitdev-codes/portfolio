@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\TechTalkController::index
 * @see app/Http/Controllers/TechTalkController.php:14
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\TechTalkController::index
+* @see app/Http/Controllers/TechTalkController.php:14
+* @route '/admin/tech-talks'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::index
+* @see app/Http/Controllers/TechTalkController.php:14
+* @route '/admin/tech-talks'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::index
+* @see app/Http/Controllers/TechTalkController.php:14
+* @route '/admin/tech-talks'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::create
@@ -88,6 +125,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\TechTalkController::create
+* @see app/Http/Controllers/TechTalkController.php:19
+* @route '/admin/tech-talks/create'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::create
+* @see app/Http/Controllers/TechTalkController.php:19
+* @route '/admin/tech-talks/create'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::create
+* @see app/Http/Controllers/TechTalkController.php:19
+* @route '/admin/tech-talks/create'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\TechTalkController::store
 * @see app/Http/Controllers/TechTalkController.php:24
 * @route '/admin/tech-talks'
@@ -120,6 +194,28 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\TechTalkController::store
+* @see app/Http/Controllers/TechTalkController.php:24
+* @route '/admin/tech-talks'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::store
+* @see app/Http/Controllers/TechTalkController.php:24
+* @route '/admin/tech-talks'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::show
@@ -190,6 +286,43 @@ show.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number |
 })
 
 /**
+* @see \App\Http\Controllers\TechTalkController::show
+* @see app/Http/Controllers/TechTalkController.php:42
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+const showForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::show
+* @see app/Http/Controllers/TechTalkController.php:42
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+showForm.get = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::show
+* @see app/Http/Controllers/TechTalkController.php:42
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+showForm.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
+
+/**
 * @see \App\Http\Controllers\TechTalkController::edit
 * @see app/Http/Controllers/TechTalkController.php:49
 * @route '/admin/tech-talks/{tech_talk}/edit'
@@ -256,6 +389,43 @@ edit.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number |
     url: edit.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\TechTalkController::edit
+* @see app/Http/Controllers/TechTalkController.php:49
+* @route '/admin/tech-talks/{tech_talk}/edit'
+*/
+const editForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::edit
+* @see app/Http/Controllers/TechTalkController.php:49
+* @route '/admin/tech-talks/{tech_talk}/edit'
+*/
+editForm.get = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::edit
+* @see app/Http/Controllers/TechTalkController.php:49
+* @route '/admin/tech-talks/{tech_talk}/edit'
+*/
+editForm.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
@@ -326,6 +496,53 @@ update.patch = (args: { tech_talk: number | { id: number } } | [tech_talk: numbe
 })
 
 /**
+* @see \App\Http\Controllers\TechTalkController::update
+* @see app/Http/Controllers/TechTalkController.php:61
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+const updateForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::update
+* @see app/Http/Controllers/TechTalkController.php:61
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+updateForm.put = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::update
+* @see app/Http/Controllers/TechTalkController.php:61
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+updateForm.patch = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PATCH',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
+
+/**
 * @see \App\Http\Controllers\TechTalkController::destroy
 * @see app/Http/Controllers/TechTalkController.php:82
 * @route '/admin/tech-talks/{tech_talk}'
@@ -382,6 +599,38 @@ destroy.delete = (args: { tech_talk: number | { id: number } } | [tech_talk: num
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+/**
+* @see \App\Http\Controllers\TechTalkController::destroy
+* @see app/Http/Controllers/TechTalkController.php:82
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+const destroyForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\TechTalkController::destroy
+* @see app/Http/Controllers/TechTalkController.php:82
+* @route '/admin/tech-talks/{tech_talk}'
+*/
+destroyForm.delete = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
 
 const TechTalkController = { index, create, store, show, edit, update, destroy }
 

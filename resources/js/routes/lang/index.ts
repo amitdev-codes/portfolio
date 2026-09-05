@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see routes/web.php:45
 * @route '/lang/{locale}'
@@ -56,6 +56,40 @@ switchMethod.head = (args: { locale: string | number } | [locale: string | numbe
     url: switchMethod.url(args, options),
     method: 'head',
 })
+
+/**
+* @see routes/web.php:45
+* @route '/lang/{locale}'
+*/
+const switchMethodForm = (args: { locale: string | number } | [locale: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: switchMethod.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see routes/web.php:45
+* @route '/lang/{locale}'
+*/
+switchMethodForm.get = (args: { locale: string | number } | [locale: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: switchMethod.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see routes/web.php:45
+* @route '/lang/{locale}'
+*/
+switchMethodForm.head = (args: { locale: string | number } | [locale: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: switchMethod.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+switchMethod.form = switchMethodForm
 
 const lang = {
     switch: Object.assign(switchMethod, switchMethod),

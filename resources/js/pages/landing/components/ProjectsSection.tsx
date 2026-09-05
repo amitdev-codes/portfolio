@@ -30,19 +30,15 @@ interface ProjectsSectionProps {
 }
 
 export default function ProjectsSection({
-    projects,
-    bg,
-    bgCard,
-    textPrimary,
-    textMuted,
-}: ProjectsSectionProps) {
-    // ✅ Use Map instead of object
+                                            projects,
+                                            bg,
+                                            bgCard,
+                                            textPrimary,
+                                            textMuted,
+                                        }: ProjectsSectionProps) {
     const scrollRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-
-    // ✅ Use state instead of ref for UI updates
     const [expandedProject, setExpandedProject] = useState<number | null>(null);
 
-    // ✅ Stable ref callback (no dynamic creation in render)
     const setScrollRef = useCallback((el: HTMLDivElement | null) => {
         if (!el) {
             return;
@@ -193,43 +189,48 @@ export default function ProjectsSection({
 
                             {/* Content */}
                             <div className="p-4">
-                                <h3
-                                    className={`text-lg font-bold ${textPrimary}`}
-                                >
-                                    {project.title}
-                                </h3>
+                                <div className="flex items-start justify-between gap-2">
+                                    <h3
+                                        className={`text-lg font-bold ${textPrimary}`}
+                                    >
+                                        {project.title}
+                                    </h3>
 
-                                <p
-                                    className={`${textMuted} text-sm ${
-                                        isExpanded(project.id)
-                                            ? ''
-                                            : 'line-clamp-2'
-                                    }`}
-                                >
-                                    {isExpanded(project.id)
-                                        ? project.full_description
-                                        : project.short_description}
-                                </p>
-
-                                <button
-                                    onClick={() => toggleExpanded(project.id)}
-                                    className="text-xs text-indigo-600"
-                                >
-                                    {isExpanded(project.id)
-                                        ? 'Read less'
-                                        : 'Read more'}
-                                </button>
-
-                                <a
+<Link
                                     href={project.link}
                                     target="_blank"
-                                    className="mt-3 flex items-center gap-2 text-sm text-white"
-                                >
-                                    View Project <ExternalLink size={14} />
-                                </a>
+                                    rel="noopener noreferrer"
+                                    title="View Project"
+                                    aria-label={`View ${project.title} project`}
+                                    className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition-colors hover:bg-indigo-700"
+                                    >
+                                    <ExternalLink size={12} />
+                                </Link>
                             </div>
+
+                            <p
+                                className={`${textMuted} text-sm ${
+                                    isExpanded(project.id)
+                                        ? ''
+                                        : 'line-clamp-2'
+                                }`}
+                            >
+                                {isExpanded(project.id)
+                                    ? project.full_description
+                                    : project.short_description}
+                            </p>
+
+                            <button
+                                onClick={() => toggleExpanded(project.id)}
+                                className="text-xs text-indigo-600"
+                            >
+                                {isExpanded(project.id)
+                                    ? 'Read less'
+                                    : 'Read more'}
+                            </button>
                         </div>
-                    ))}
+                        </div>
+                        ))}
                 </div>
             </div>
 

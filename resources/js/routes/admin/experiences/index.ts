@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\ExperienceController::index
 * @see app/Http/Controllers/ExperienceController.php:14
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\ExperienceController::index
+* @see app/Http/Controllers/ExperienceController.php:14
+* @route '/admin/experiences'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::index
+* @see app/Http/Controllers/ExperienceController.php:14
+* @route '/admin/experiences'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::index
+* @see app/Http/Controllers/ExperienceController.php:14
+* @route '/admin/experiences'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\ExperienceController::create
@@ -88,6 +125,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\ExperienceController::create
+* @see app/Http/Controllers/ExperienceController.php:19
+* @route '/admin/experiences/create'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::create
+* @see app/Http/Controllers/ExperienceController.php:19
+* @route '/admin/experiences/create'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::create
+* @see app/Http/Controllers/ExperienceController.php:19
+* @route '/admin/experiences/create'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\ExperienceController::store
 * @see app/Http/Controllers/ExperienceController.php:24
 * @route '/admin/experiences'
@@ -120,6 +194,28 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\ExperienceController::store
+* @see app/Http/Controllers/ExperienceController.php:24
+* @route '/admin/experiences'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::store
+* @see app/Http/Controllers/ExperienceController.php:24
+* @route '/admin/experiences'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\ExperienceController::show
@@ -190,6 +286,43 @@ show.head = (args: { experience: number | { id: number } } | [experience: number
 })
 
 /**
+* @see \App\Http\Controllers\ExperienceController::show
+* @see app/Http/Controllers/ExperienceController.php:40
+* @route '/admin/experiences/{experience}'
+*/
+const showForm = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::show
+* @see app/Http/Controllers/ExperienceController.php:40
+* @route '/admin/experiences/{experience}'
+*/
+showForm.get = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::show
+* @see app/Http/Controllers/ExperienceController.php:40
+* @route '/admin/experiences/{experience}'
+*/
+showForm.head = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
+
+/**
 * @see \App\Http\Controllers\ExperienceController::edit
 * @see app/Http/Controllers/ExperienceController.php:45
 * @route '/admin/experiences/{experience}/edit'
@@ -256,6 +389,43 @@ edit.head = (args: { experience: number | { id: number } } | [experience: number
     url: edit.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\ExperienceController::edit
+* @see app/Http/Controllers/ExperienceController.php:45
+* @route '/admin/experiences/{experience}/edit'
+*/
+const editForm = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::edit
+* @see app/Http/Controllers/ExperienceController.php:45
+* @route '/admin/experiences/{experience}/edit'
+*/
+editForm.get = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::edit
+* @see app/Http/Controllers/ExperienceController.php:45
+* @route '/admin/experiences/{experience}/edit'
+*/
+editForm.head = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\ExperienceController::update
@@ -326,6 +496,53 @@ update.patch = (args: { experience: number | { id: number } } | [experience: num
 })
 
 /**
+* @see \App\Http\Controllers\ExperienceController::update
+* @see app/Http/Controllers/ExperienceController.php:50
+* @route '/admin/experiences/{experience}'
+*/
+const updateForm = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::update
+* @see app/Http/Controllers/ExperienceController.php:50
+* @route '/admin/experiences/{experience}'
+*/
+updateForm.put = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::update
+* @see app/Http/Controllers/ExperienceController.php:50
+* @route '/admin/experiences/{experience}'
+*/
+updateForm.patch = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PATCH',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
+
+/**
 * @see \App\Http\Controllers\ExperienceController::destroy
 * @see app/Http/Controllers/ExperienceController.php:71
 * @route '/admin/experiences/{experience}'
@@ -382,6 +599,38 @@ destroy.delete = (args: { experience: number | { id: number } } | [experience: n
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+/**
+* @see \App\Http\Controllers\ExperienceController::destroy
+* @see app/Http/Controllers/ExperienceController.php:71
+* @route '/admin/experiences/{experience}'
+*/
+const destroyForm = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\ExperienceController::destroy
+* @see app/Http/Controllers/ExperienceController.php:71
+* @route '/admin/experiences/{experience}'
+*/
+destroyForm.delete = (args: { experience: number | { id: number } } | [experience: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
 
 const experiences = {
     index: Object.assign(index, index),

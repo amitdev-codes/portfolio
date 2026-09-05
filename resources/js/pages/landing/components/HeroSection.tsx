@@ -92,7 +92,7 @@ export default function HeroSection({
     const cvLabel = links.cv_type
         ? `Download CV (.${links.cv_type})`
         : 'Download CV';
-    
+
     return (
         <section
             id="home"
