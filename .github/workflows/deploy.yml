@@ -25,18 +25,24 @@ jobs:
       - name: Fix file ownership after composer
         run: sudo chown -R $(id -u):$(id -g) .
 
-      # 3. Build frontend assets — run as root so apk add works; PHP needed for wayfinder:generate
+      # 3. Provide a build-time .env so `artisan` can boot for wayfinder:generate
+      - name: Prepare build-time .env
+        run: |
+          cp .env.example .env 2>/dev/null || touch .env
+          docker run --rm -v ${{ github.workspace }}:/app -w /app php:8.4-cli-alpine sh -c "php artisan key:generate --force"
+
+      # 4. Build frontend assets — run as root so apk add works; PHP needed for wayfinder:generate
       - name: Build Frontend Assets (Yarn)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar \
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo \
             && ln -sf /usr/bin/php84 /usr/bin/php \
             && yarn install && yarn build"
 
-      # 4. Fix ownership of files created by the root-run node container
+      # 5. Fix ownership of files created by the root-run node/php containers
       - name: Fix file ownership after build
         run: sudo chown -R $(id -u):$(id -g) .
 
-      # 5. Package pre-built app (includes compiled public/build and vendor directory)
+      # 6. Package pre-built app (includes compiled public/build and vendor directory)
       - name: Package build for transfer
         run: |
           rm -rf .git .github node_modules
