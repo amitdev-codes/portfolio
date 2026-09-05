@@ -11,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 1. Install Composer dependencies FIRST (Wayfinder needs vendor/ + artisan)
+      # 1. Install Composer dependencies FIRST (Wayfinder needs vendor/ + artisan present)
       - name: Install Composer Dependencies
         run: |
           docker run --rm -v ${{ github.workspace }}:/app -w /app php:8.4-cli-alpine sh -c "apk add --no-cache git unzip \
@@ -25,14 +25,14 @@ jobs:
       - name: Fix file ownership after composer
         run: sudo chown -R $(id -u):$(id -g) .
 
-      # 3. Build frontend assets — needs PHP available for wayfinder:generate
+      # 3. Build frontend assets — run as root so apk add works; PHP needed for wayfinder:generate
       - name: Build Frontend Assets (Yarn)
         run: |
-          docker run --rm --user "$(id -u):$(id -g)" -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar \
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar \
             && ln -sf /usr/bin/php84 /usr/bin/php \
             && yarn install && yarn build"
 
-      # 4. Fix ownership again in case the node container wrote root-owned files
+      # 4. Fix ownership of files created by the root-run node container
       - name: Fix file ownership after build
         run: sudo chown -R $(id -u):$(id -g) .
 
