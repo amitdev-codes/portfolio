@@ -9,6 +9,7 @@ import experiences from './experiences'
 import stats from './stats'
 import abouts from './abouts'
 import portfolioInformations from './portfolio-informations'
+import aboutInformations from './about-informations'
 /**
 * @see \Inertia\Controller::__invoke
 * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
@@ -102,6 +103,7 @@ const admin = {
     stats: Object.assign(stats, stats),
     abouts: Object.assign(abouts, abouts),
     portfolioInformations: Object.assign(portfolioInformations, portfolioInformations),
+    aboutInformations: Object.assign(aboutInformations, aboutInformations),
 }
 
 export default admin

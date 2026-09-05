@@ -3,9 +3,9 @@ import { Users } from 'lucide-react';
 import Breadcrumb from '@/components/Breadcrumb';
 import DataTable from '@/components/DataTable';
 import type { ColumnConfig } from '@/components/DataTable';
-import { create, destroy, edit, show } from '@/routes/admin/tech-talks';
+import {create,edit,show,destroy} from '@/routes/admin/tech-talks';
 
-interface TechTalk {
+type TechTalk ={
     id: number;
     category: string;
     category_color: string;
@@ -114,6 +114,7 @@ export default function TechTalkIndex({ techTalks }: PageProps) {
             filterable: false,
         },
     ];
+
 
     return (
         <>

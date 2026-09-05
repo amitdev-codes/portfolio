@@ -1,14 +1,43 @@
+import { Link } from '@inertiajs/react';
 import {
-    ChevronDown,
     Github,
     Linkedin,
     Mail,
+    Phone,
     ArrowUpRight,
     MapPin,
     Code2,
+    Download,
 } from 'lucide-react';
 
+interface HeroStat {
+    value: string;
+    label: string;
+}
+
+interface HeroData {
+    name: { first: string; middle?: string | null; last?: string | null };
+    role_title?: string | null;
+    tagline?: string | null;
+    location?: string | null;
+    tech_stack?: string | null;
+    is_available: boolean;
+    availability_text?: string | null;
+    stats: HeroStat[];
+    skills?: string[];
+    profile_image?: string | null;
+    links: {
+        github?: string | null;
+        linkedin?: string | null;
+        email?: string | null;
+        phone?: string | null;
+        cv?: string | null;
+        cv_type?: string | null;
+    };
+}
+
 interface HeroSectionProps {
+    hero: HeroData;
     darkMode: boolean;
     textPrimary: string;
     textMuted: string;
@@ -18,23 +47,51 @@ interface HeroSectionProps {
     handleCursorHover: (on: boolean) => void;
 }
 
-const stats = [
-    { value: '3+', label: 'Years Exp.' },
-    { value: '20+', label: 'Projects' },
-    { value: '15+', label: 'Clients' },
-    { value: '99%', label: 'Uptime' },
-];
-
 export default function HeroSection({
-    darkMode,
-    textPrimary,
-    textMuted,
-    bg,
-    bgCard,
-    borderColor,
-    handleCursorHover,
-}: HeroSectionProps) {
+                                        hero,
+                                        darkMode,
+                                        textPrimary,
+                                        textMuted,
+                                        bgCard,
+                                        borderColor,
+                                        handleCursorHover,
+                                    }: HeroSectionProps) {
+    if (!hero) {
+        return null;
+    } // guard #1 — bail out safely if hero itself is missing
+
     const dm = darkMode;
+    const {
+        name,
+        role_title,
+        tagline,
+        location,
+        tech_stack,
+        is_available,
+        availability_text,
+        stats = [],       // guard #2 — default stats
+        skills = [],
+        profile_image,
+        links = {},        // guard #3 — default links to empty object
+    } = hero;
+
+    const socialLinks = [
+        { icon: Github, label: 'GitHub', href: links?.github },
+        { icon: Linkedin, label: 'LinkedIn', href: links?.linkedin },
+        {
+            icon: Mail,
+            label: 'Email',
+            href: links?.email ? `mailto:${links.email}` : undefined,
+        },
+    ].filter((s) => s.href);
+
+    const yearsExp = stats.find((s) =>
+        s.label.toLowerCase().includes('year'),
+    )?.value;
+
+    const cvLabel = links.cv_type
+        ? `Download CV (.${links.cv_type})`
+        : 'Download CV';
 
     return (
         <section
@@ -44,10 +101,10 @@ export default function HeroSection({
             {/* Subtle background orbs */}
             <div className="pointer-events-none absolute inset-0 overflow-hidden">
                 <div
-                    className={`absolute -top-32 -right-32 h-[500px] w-[500px] rounded-full ${dm ? 'bg-indigo-900/20' : 'bg-indigo-100/60'} blur-3xl`}
+                    className={`absolute -top-32 -right-32 h-125 w-125 rounded-full ${dm ? 'bg-indigo-900/20' : 'bg-indigo-100/60'} blur-3xl`}
                 />
                 <div
-                    className={`absolute -bottom-32 -left-32 h-[400px] w-[400px] rounded-full ${dm ? 'bg-pink-900/10' : 'bg-pink-100/40'} blur-3xl`}
+                    className={`absolute -bottom-32 -left-32 h-100 w-100 rounded-full ${dm ? 'bg-pink-900/10' : 'bg-pink-100/40'} blur-3xl`}
                 />
             </div>
 
@@ -59,7 +116,7 @@ export default function HeroSection({
                         <div className="mb-6 flex items-center gap-3">
                             <span className="h-px w-8 bg-indigo-600" />
                             <span className="text-xs font-bold tracking-[0.2em] text-indigo-600 uppercase">
-                                Full Stack Developer
+                                {role_title || 'Full Stack Developer'}
                             </span>
                         </div>
 
@@ -67,88 +124,133 @@ export default function HeroSection({
                         <h1
                             className={`mb-6 text-5xl leading-[0.95] font-black tracking-tight lg:text-6xl xl:text-7xl ${textPrimary}`}
                         >
-                            Amit
+                            {name.first}
                             <br />
-                            <span className="text-indigo-600">Kumar</span>
-                            <br />
-                            <span
-                                className={
-                                    dm ? 'text-slate-600' : 'text-slate-300'
-                                }
-                            >
-                                Dev
+                            <span className="text-indigo-600">
+                                {name.middle || name.last}
                             </span>
+                            {name.middle && name.last && (
+                                <>
+                                    <br />
+                                    <span
+                                        className={
+                                            dm
+                                                ? 'text-slate-600'
+                                                : 'text-slate-300'
+                                        }
+                                    >
+                                        {name.last}
+                                    </span>
+                                </>
+                            )}
                         </h1>
 
                         {/* Tagline */}
                         <p
                             className={`text-base ${textMuted} mb-8 max-w-md leading-relaxed font-light`}
                         >
-                            I craft high-performance web applications with React
-                            &amp; Laravel — turning complex problems into
-                            elegant, scalable solutions.
+                            {tagline}
                         </p>
 
                         {/* Badges */}
-                        <div className="mb-8 flex flex-wrap gap-2">
-                            <span
-                                className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
-                            >
-                                <MapPin size={12} className="text-indigo-500" />{' '}
-                                Kathmandu, Nepal
-                            </span>
-                            <span
-                                className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
-                            >
-                                <Code2 size={12} className="text-indigo-500" />{' '}
-                                React + Laravel
-                            </span>
-                            <span className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/30">
-                                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                                Available for work
-                            </span>
+                        <div className="mb-6 flex flex-wrap gap-2">
+                            {location && (
+                                <span
+                                    className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
+                                >
+                                    <MapPin
+                                        size={12}
+                                        className="text-indigo-500"
+                                    />{' '}
+                                    {location}
+                                </span>
+                            )}
+                            {tech_stack && (
+                                <span
+                                    className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
+                                >
+                                    <Code2
+                                        size={12}
+                                        className="text-indigo-500"
+                                    />{' '}
+                                    {tech_stack}
+                                </span>
+                            )}
+                            {is_available && (
+                                <span className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-600 dark:border-emerald-800 dark:bg-emerald-950/30">
+                                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                                    {availability_text}
+                                </span>
+                            )}
                         </div>
 
+                        {/* Skills tag row — fills left-side space, shown only if provided */}
+                        {skills.length > 0 && (
+                            <div className="mb-8 flex flex-wrap gap-1.5">
+                                {skills.map((skill) => (
+                                    <span
+                                        key={skill}
+                                        className={`text-[11px] font-medium ${textMuted} rounded-md border ${borderColor} px-2 py-1`}
+                                    >
+                                        {skill}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+
                         {/* CTAs */}
-                        <div className="mb-8 flex gap-3">
-                            <a
+                        <div className="mb-8 flex flex-wrap gap-3">
+                            <Link
                                 href="#contact"
                                 onMouseEnter={() => handleCursorHover(true)}
                                 onMouseLeave={() => handleCursorHover(false)}
                                 className="flex items-center gap-2 rounded-full bg-indigo-600 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-200"
                             >
                                 Let's Talk <ArrowUpRight size={16} />
-                            </a>
-                            <a
+                            </Link>
+                            <Link
                                 href="#projects"
                                 onMouseEnter={() => handleCursorHover(true)}
                                 onMouseLeave={() => handleCursorHover(false)}
                                 className={`${bgCard} border-2 ${dm ? 'border-slate-700 text-slate-200' : 'border-slate-200 text-slate-700'} rounded-full px-7 py-3.5 text-sm font-bold transition-all hover:border-indigo-400`}
                             >
                                 View Work
-                            </a>
-                        </div>
-
-                        {/* Social Icons */}
-                        <div className="flex gap-2">
-                            {[
-                                { icon: Github, label: 'GitHub' },
-                                { icon: Linkedin, label: 'LinkedIn' },
-                                { icon: Mail, label: 'Email' },
-                            ].map(({ icon: Icon, label }) => (
+                            </Link>
+                            {links.cv && (
                                 <a
-                                    key={label}
-                                    href="#"
+                                    href={links.cv}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    download
                                     onMouseEnter={() => handleCursorHover(true)}
                                     onMouseLeave={() =>
                                         handleCursorHover(false)
                                     }
-                                    title={label}
-                                    className={`h-9 w-9 rounded-full ${bgCard} border ${borderColor} ${textMuted} flex items-center justify-center shadow-sm transition-all hover:border-indigo-600 hover:bg-indigo-600 hover:text-white`}
+                                    className={`flex items-center gap-2 rounded-full border-2 border-dashed ${dm ? 'border-indigo-700 text-indigo-300' : 'border-indigo-300 text-indigo-600'} px-7 py-3.5 text-sm font-bold transition-all hover:border-indigo-500`}
                                 >
-                                    <Icon size={15} />
+                                    <Download size={16} /> {cvLabel}
                                 </a>
-                            ))}
+                            )}
+                        </div>
+
+                        {/* Social Icons */}
+                        <div className="flex gap-2">
+                            {socialLinks
+                                .filter((link): link is typeof link & { href: string } => !!link.href)
+                                .map(({ icon: Icon, label, href }) => (
+                                    <Link
+                                        key={label}
+                                        href={href}           // Now guaranteed to be string
+                                        target={label !== 'Email' ? '_blank' : undefined}
+                                        rel="noreferrer"
+                                        onMouseEnter={() => handleCursorHover(true)}
+                                        onMouseLeave={() => handleCursorHover(false)}
+                                        title={label}
+                                        className={`h-9 w-9 rounded-full ${bgCard} border ${borderColor} ${textMuted} flex items-center justify-center shadow-sm transition-all hover:border-indigo-600 hover:bg-indigo-600 hover:text-white`}
+                                    >
+                                        <Icon size={15} />
+                                    </Link>
+                                ))}
                         </div>
                     </div>
 
@@ -166,21 +268,26 @@ export default function HeroSection({
                                 className={`relative z-10 m-3 h-44 w-44 overflow-hidden rounded-full ring-4 ${dm ? 'ring-indigo-800/60' : 'ring-indigo-100'} shadow-2xl`}
                             >
                                 <img
-                                    src="images/profileimage.png"
-                                    alt="Amit Kumar Dev"
+                                    src={
+                                        profile_image ||
+                                        '/images/profileimage.png'
+                                    }
+                                    alt={`${name.first} ${name.last || ''}`}
                                     className="h-full w-full object-cover object-top"
                                 />
                             </div>
 
                             {/* Experience badge */}
-                            <div className="absolute -top-1 -right-1 z-20 flex h-12 w-12 flex-col items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-300/40">
-                                <span className="text-sm leading-none font-black">
-                                    3+
-                                </span>
-                                <span className="text-[9px] font-semibold opacity-80">
-                                    yrs
-                                </span>
-                            </div>
+                            {yearsExp && (
+                                <div className="absolute -top-1 -right-1 z-20 flex h-12 w-12 flex-col items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-300/40">
+                                    <span className="text-sm leading-none font-black">
+                                        {yearsExp}
+                                    </span>
+                                    <span className="text-[9px] font-semibold opacity-80">
+                                        yrs
+                                    </span>
+                                </div>
+                            )}
                         </div>
 
                         {/* Stat pills */}
@@ -201,6 +308,47 @@ export default function HeroSection({
                                 </div>
                             ))}
                         </div>
+
+                        {/* Quick Contact card — fills right-side space */}
+                        {(links.email || links.phone) && (
+                            <div
+                                className={`${bgCard} border ${borderColor} w-full max-w-55 rounded-xl px-4 py-3 shadow-sm`}
+                            >
+                                <p
+                                    className={`mb-2 text-[10px] font-bold tracking-widest uppercase ${textMuted}`}
+                                >
+                                    Quick Contact
+                                </p>
+                                <div className="space-y-1.5">
+                                    {links.email && (
+                                        <a
+                                            href={`mailto:${links.email}`}
+                                            className={`flex items-center gap-2 text-xs ${textPrimary} truncate transition-colors hover:text-indigo-600`}
+                                        >
+                                            <Mail
+                                                size={12}
+                                                className="shrink-0 text-indigo-500"
+                                            />
+                                            <span className="truncate">
+                                                {links.email}
+                                            </span>
+                                        </a>
+                                    )}
+                                    {links.phone && (
+                                        <a
+                                            href={`tel:${links.phone}`}
+                                            className={`flex items-center gap-2 text-xs ${textPrimary} transition-colors hover:text-indigo-600`}
+                                        >
+                                            <Phone
+                                                size={12}
+                                                className="shrink-0 text-indigo-500"
+                                            />
+                                            {links.phone}
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 

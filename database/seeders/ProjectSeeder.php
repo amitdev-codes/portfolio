@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Project;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class ProjectSeeder extends Seeder
 {
@@ -22,11 +24,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#6366f1',
                 'tech' => ['React', 'Laravel', 'Stripe', 'PostgreSQL', 'Redis'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1557821552-17105176677c?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['ecommerce-1.jpg', 'ecommerce-2.jpg', 'ecommerce-3.jpg'],
             ],
             [
                 'title' => 'Analytics Dashboard',
@@ -37,11 +35,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#ec4899',
                 'tech' => ['React', 'Chart.js', 'Node.js', 'MongoDB', 'WebSocket'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['analytics-1.jpg', 'analytics-2.jpg', 'analytics-3.jpg'],
             ],
             [
                 'title' => 'Social Network',
@@ -52,11 +46,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#10b981',
                 'tech' => ['React', 'Firebase', 'WebSocket', 'Tailwind', 'S3'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['social-1.jpg', 'social-2.jpg', 'social-3.jpg'],
             ],
             [
                 'title' => 'Content Management',
@@ -67,11 +57,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#f59e0b',
                 'tech' => ['Laravel', 'Vue.js', 'PostgreSQL', 'S3', 'GraphQL'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['cms-1.jpg', 'cms-2.jpg', 'cms-3.jpg'],
             ],
             [
                 'title' => 'Learning Platform',
@@ -82,11 +68,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#0ea5e9',
                 'tech' => ['React', 'Laravel', 'FFmpeg', 'Redis', 'HLS'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['learning-1.jpg', 'learning-2.jpg', 'learning-3.jpg'],
             ],
             [
                 'title' => 'Healthcare Management',
@@ -97,11 +79,7 @@ class ProjectSeeder extends Seeder
                 'accent' => '#8b5cf6',
                 'tech' => ['React', 'Node.js', 'MongoDB', 'WebRTC', 'HIPAA'],
                 'link' => '#',
-                'screenshots' => [
-                    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=380&fit=crop',
-                    'https://images.unsplash.com/photo-1559000357-f6b52ddfbe37?w=600&h=380&fit=crop',
-                ],
+                'screenshots' => ['healthcare-1.jpg', 'healthcare-2.jpg', 'healthcare-3.jpg'],
             ],
         ];
 
@@ -120,9 +98,29 @@ class ProjectSeeder extends Seeder
                 'sort_order' => $index + 1,
             ]);
 
-            foreach ($item['screenshots'] as $image) {
-                $project->addMediaFromUrl($image)
-                    ->toMediaCollection('project_screenshots');
+            foreach ($item['screenshots'] as $filename) {
+                $path = database_path("seeders/images/{$filename}");
+
+                if (! file_exists($path)) {
+                    $this->command?->warn(
+                        "  Missing local seed image for \"{$item['title']}\": {$path}"
+                    );
+                    continue;
+                }
+
+                try {
+                    $project->addMedia($path)
+                        ->preservingOriginal() // keep the source file in database/seeders/images
+                        ->toMediaCollection('project_screenshots');
+                } catch (FileCannotBeAdded $e) {
+                    Log::warning("ProjectSeeder: could not attach screenshot for '{$item['title']}': {$path}", [
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    $this->command?->warn(
+                        "  Skipped image for \"{$item['title']}\": {$path}"
+                    );
+                }
             }
         }
     }

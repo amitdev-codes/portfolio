@@ -14,28 +14,35 @@ class PortfolioInformationController extends Controller
 {
     public function index(Request $request)
     {
-        return Inertia::render('portfolio-informations/Index', (new PortfolioInformationDataTable($request))->response());
+        return Inertia::render('portfolio-informations/Index', new PortfolioInformationDataTable($request)->response());
     }
 
     public function create()
     {
-        return Inertia::render('portfolio-informations/PortFolioInformationForm');
+        return Inertia::render('portfolio-informations/PortFolioInformationForm', [
+            'mode' => 'create',
+        ]);
     }
 
     public function store(StorePortfolioInformationRequest $request)
     {
-        $data = $request->safe()->except(['profile_image', 'cover_image']);
+        $data = $request->safe()->except(['profile_image', 'cover_image', 'cv_file']);
+
         $portfolio = PortfolioInformation::create($data);
-        // Handle Profile Image with Spatie Media Library
+
         if ($request->hasFile('profile_image')) {
             $portfolio->addMedia($request->file('profile_image'))
-                ->toMediaCollection('profile_images');   // Recommended collection name
+                ->toMediaCollection('profile_images');
         }
 
-        // Handle Cover Image
         if ($request->hasFile('cover_image')) {
             $portfolio->addMedia($request->file('cover_image'))
                 ->toMediaCollection('cover_images');
+        }
+
+        if ($request->hasFile('cv_file')) {
+            $portfolio->addMedia($request->file('cv_file'))
+                ->toMediaCollection('cv_documents');
         }
 
         return redirect()
@@ -51,23 +58,32 @@ class PortfolioInformationController extends Controller
     public function edit(PortfolioInformation $portfolioInformation)
     {
         $portfolioInformation->load('media');
-        return Inertia::render('portfolio-informations/PortFolioInformationForm', compact('portfolioInformation'));
+
+        return Inertia::render('portfolio-informations/PortFolioInformationForm', [
+            'portfolioInformation' => $portfolioInformation,
+            'mode' => 'edit',
+        ]);
     }
 
     public function update(UpdatePortfolioInformationRequest $request, PortfolioInformation $portfolioInformation)
     {
-        $portfolioInformation->update($request->validated());
+        $data = $request->safe()->except(['profile_image', 'cover_image', 'cv_file']);
+
+        $portfolioInformation->update($data);
+
         if ($request->hasFile('profile_image')) {
-            $portfolioInformation->clearMediaCollection('profile_images');
             $portfolioInformation->addMedia($request->file('profile_image'))
-                ->toMediaCollection('profile_images');
+                ->toMediaCollection('profile_images'); // singleFile() auto-replaces the old one
         }
 
-        // Update Cover Image (if uploaded)
         if ($request->hasFile('cover_image')) {
-            $portfolioInformation->clearMediaCollection('cover_images');
             $portfolioInformation->addMedia($request->file('cover_image'))
                 ->toMediaCollection('cover_images');
+        }
+
+        if ($request->hasFile('cv_file')) {
+            $portfolioInformation->addMedia($request->file('cv_file'))
+                ->toMediaCollection('cv_documents');
         }
 
         return redirect()

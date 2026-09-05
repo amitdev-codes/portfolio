@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 export const landing = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ landing.definition = {
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 landing.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ landing.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 landing.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ landing.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 landing.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ landing.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 const landingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const landingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 landingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ landingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:12
+* @see app/Http/Controllers/HomeController.php:15
 * @route '/'
 */
 landingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

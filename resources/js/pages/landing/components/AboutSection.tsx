@@ -1,4 +1,29 @@
+interface AboutHighlight {
+    icon: string;
+    title: string;
+    desc: string;
+}
+
+interface AboutExperience {
+    year: string;
+    role: string;
+    company: string;
+    desc: string;
+}
+
+interface AboutData {
+    section_label: string;
+    heading_main: string;
+    heading_highlight: string;
+    highlights: AboutHighlight[];
+    experience_heading: string;
+    experiences: AboutExperience[];
+    tech_stack_label: string;
+    tech_stack: string[];
+}
+
 interface AboutSectionProps {
+    about: AboutData | null;
     darkMode: boolean;
     textPrimary: string;
     textMuted: string;
@@ -6,28 +31,9 @@ interface AboutSectionProps {
     bgCard: string;
     borderColor: string;
 }
-const experiences = [
-    {
-        year: '2024–Now',
-        role: 'Senior Full Stack Developer',
-        company: 'TechCorp Nepal',
-        desc: 'Led a team of 4 developers building SaaS products used by 50k+ users.',
-    },
-    {
-        year: '2022–2024',
-        role: 'Full Stack Developer',
-        company: 'Digital Agency',
-        desc: 'Built 10+ client projects across e-commerce, healthcare, and fintech.',
-    },
-    {
-        year: '2021–2022',
-        role: 'Junior Developer',
-        company: 'StartupXYZ',
-        desc: 'Developed internal tools and APIs in Laravel + Vue.js stack.',
-    },
-];
 
 export default function AboutSection({
+    about,
     darkMode,
     textPrimary,
     textMuted,
@@ -36,6 +42,19 @@ export default function AboutSection({
     borderColor,
 }: AboutSectionProps) {
     const dm = darkMode;
+
+    if (!about) return null; // or a skeleton/fallback
+
+    const {
+        section_label,
+        heading_main,
+        heading_highlight,
+        highlights,
+        experience_heading,
+        experiences,
+        tech_stack_label,
+        tech_stack,
+    } = about;
 
     return (
         <section
@@ -46,32 +65,19 @@ export default function AboutSection({
                 {/* Header */}
                 <div className="fade-up mb-16">
                     <span className="text-xs font-bold tracking-[0.2em] text-indigo-600 uppercase">
-                        About Me
+                        {section_label}
                     </span>
                     <h2 className={`mt-3 text-5xl font-black ${textPrimary}`}>
-                        What I <span className="text-indigo-600">Bring</span>
+                        {heading_main}{' '}
+                        <span className="text-indigo-600">
+                            {heading_highlight}
+                        </span>
                     </h2>
                 </div>
 
                 <div className="grid grid-cols-1 items-start gap-16 lg:grid-cols-2">
                     <div className="fade-up space-y-6">
-                        {[
-                            {
-                                icon: '🎯',
-                                title: 'Strategic Thinking',
-                                desc: 'I approach projects with clear goals, designing solutions that deliver real business value.',
-                            },
-                            {
-                                icon: '⚡',
-                                title: 'Full Stack Expertise',
-                                desc: 'From DB architecture to pixel-perfect UI — comfortable across the entire stack.',
-                            },
-                            {
-                                icon: '🛡️',
-                                title: 'Code Quality First',
-                                desc: 'Clean, maintainable, well-documented code that scales without pain.',
-                            },
-                        ].map((c, i) => (
+                        {highlights.map((c, i) => (
                             <div
                                 key={i}
                                 className={`flex gap-5 rounded-2xl p-6 ${bg} border hover:bg-indigo-50 ${borderColor} group transition-all hover:border-indigo-200`}
@@ -98,7 +104,7 @@ export default function AboutSection({
                             className={`text-xl font-black ${textPrimary} mb-8 flex items-center gap-3`}
                         >
                             <span className="h-px w-6 bg-indigo-600"></span>{' '}
-                            Years of Experience
+                            {experience_heading}
                         </h3>
                         <div className="relative">
                             <div
@@ -139,21 +145,10 @@ export default function AboutSection({
                             <p
                                 className={`text-xs font-bold ${textMuted} mb-4 tracking-widest uppercase`}
                             >
-                                Tech Stack
+                                {tech_stack_label}
                             </p>
                             <div className="flex flex-wrap gap-2">
-                                {[
-                                    'React',
-                                    'Laravel',
-                                    'TypeScript',
-                                    'PostgreSQL',
-                                    'Redis',
-                                    'Docker',
-                                    'AWS',
-                                    'Tailwind',
-                                    'Node.js',
-                                    'Vue.js',
-                                ].map((t) => (
+                                {tech_stack.map((t) => (
                                     <span
                                         key={t}
                                         className={`text-xs font-semibold ${dm ? 'bg-slate-700 text-slate-200' : 'bg-slate-900 text-white'} rounded-full px-3 py-1.5`}

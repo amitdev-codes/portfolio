@@ -1,20 +1,76 @@
-name: Laravel Cloud Deploy
+name: Deploy Laravel
 
 on:
   push:
-    branches: [main, master]
+    branches: [ main]
 
 jobs:
-  deploy:
+  deploy-own-server:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
+    environment: 'Babbal Host'
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Deploy to Laravel Cloud
-        uses: laravel/cloud-action@v1
+      # 1. Build frontend assets using Docker Node container
+      - name: Build Frontend Assets (Yarn)
+        run: |
+          docker run --rm --user "$(id -u):$(id -g)" -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "yarn install && yarn build"
+
+      # 2. Install Composer dependencies using Docker Composer container
+      - name: Install Composer Dependencies
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/app -w /app php:8.4-cli-alpine sh -c "apk add --no-cache git unzip \
+            && curl -sSLf -o /usr/local/bin/install-php-extensions https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+            && chmod +x /usr/local/bin/install-php-extensions \
+            && install-php-extensions zip gd exif \
+            && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+            && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist --no-scripts"
+
+      # 3. Fix ownership of files created by the root-run composer container
+      - name: Fix file ownership
+        run: sudo chown -R $(id -u):$(id -g) .
+
+      # 4. Package pre-built app (includes compiled public/build and vendor directory)
+      - name: Package build for transfer
+        run: |
+          rm -rf .git .github node_modules
+          rm -f .env .env.example
+          tar -czf ../deploy.tar.gz --exclude=storage .
+          mv ../deploy.tar.gz ./deploy.tar.gz
+
+      - name: Upload archive via SCP
+        uses: appleboy/scp-action@v0.1.7
         with:
-          api-token: ${{ secrets.LARAVEL_CLOUD_API_TOKEN }}
-          runtime: php-8.4
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "deploy.tar.gz"
+          target: "~/"
+          strip_components: 0
+
+      - name: Extract archive and run post-deploy Artisan commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }} && php artisan down || true
+            mkdir -p ${{ secrets.DEPLOY_PATH }}
+            rm -rf ${{ secrets.DEPLOY_PATH }}/public/build
+            tar -xzf ~/deploy.tar.gz -C ${{ secrets.DEPLOY_PATH }}
+            rm -f ~/deploy.tar.gz
+            cd ${{ secrets.DEPLOY_PATH }}
+            php artisan package:discover --ansi
+            php artisan migrate --force
+            php artisan config:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan storage:link || true
+            php artisan queue:restart || true
+            php artisan up

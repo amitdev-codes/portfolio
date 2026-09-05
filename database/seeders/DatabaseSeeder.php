@@ -17,10 +17,13 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             UserSeeder::class,
             RolePermissionSeeder::class,
-            ProjectSeeder::class,
+
             TechTalkSeeder::class,
             ExperienceSeeder::class,
             StatSeeder::class,
+            PortfolioInformationSeeder::class,
+            AboutInformationSeeder::class,
+            ProjectSeeder::class,
         ]);
     }
 }

@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('cover_image')->nullable();
             $table->string('video_link')->nullable(); // YouTube / talk link
             $table->string('source_link')->nullable(); // slides / repo
+            $table->string('author_name')->nullable();
 
             // ⚙️ Status
             $table->boolean('is_published')->default(true);

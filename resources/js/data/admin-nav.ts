@@ -10,6 +10,7 @@ import {
     FileText,
 } from 'lucide-react';
 import { dashboard } from '@/routes/admin';
+import {index as aboutInformationIndex} from '@/routes/admin/about-informations';
 import {index as experiencesIndex} from '@/routes/admin/experiences';
 import { index as permissionsIndex } from '@/routes/admin/permissions';
 import {index as portfolioInformationIndex} from '@/routes/admin/portfolio-informations';
@@ -43,6 +44,11 @@ export const mainNavItems: NavItem[] = [
                 title: 'Portfolio Info',
                 href: portfolioInformationIndex(),
                 icon: FileText,
+            },
+            {
+                title: 'About Information',
+                href: aboutInformationIndex(),
+                icon: FolderKanban,
             },
             {
                 title: 'Projects',

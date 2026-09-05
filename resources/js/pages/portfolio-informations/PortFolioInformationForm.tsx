@@ -14,6 +14,13 @@ import {
     Linkedin,
     Github,
     AlertCircle,
+    Sparkles,
+    Plus,
+    Trash2,
+    Briefcase,
+    Code2,
+    Upload,
+    X,
 } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -25,7 +32,11 @@ import { InputField } from '@/components/form-components/InputField';
 import { NepalPhoneField } from '@/components/form-components/NepalPhoneField';
 import { NumberField } from '@/components/form-components/NumberField';
 import { TextareaField } from '@/components/form-components/TextareaField';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { index, store, update } from '@/routes/admin/portfolio-informations';
 
 export interface Media {
@@ -37,13 +48,21 @@ export interface Media {
     preview_url: string;
 }
 
+interface HeroStat {
+    value: string;
+    label: string;
+}
+
 interface PortfolioInformation {
     id?: number;
     first_name: string;
     middle_name: string;
     last_name: string;
     email: string;
+    role_title: string;
+    tech_stack: string;
     address: string;
+    short_location: string;
     latitude: string;
     longitude: string;
     phone_number: string;
@@ -56,8 +75,13 @@ interface PortfolioInformation {
     description: string;
     seo_title: string;
     seo_metatags: string;
+    is_available: boolean;
+    availability_text: string;
+    stats: HeroStat[];
+    skills: string[];
     profile_image: string | File | null;
     cover_image: string | File | null;
+    cv_file: File | null;
 }
 
 interface Props {
@@ -65,7 +89,16 @@ interface Props {
     mode: 'create' | 'edit';
 }
 
-export default function PortFolioInformationForm({ portfolioInformation, mode,
+const DEFAULT_STATS: HeroStat[] = [
+    { value: '3+', label: 'Years Exp.' },
+    { value: '20+', label: 'Projects' },
+    { value: '15+', label: 'Clients' },
+    { value: '99%', label: 'Uptime' },
+];
+
+export default function PortFolioInformationForm({
+                                                     portfolioInformation,
+
                                                  }: Props) {
     const { data, setData, processing, errors } = useForm<PortfolioInformation>(
         {
@@ -73,7 +106,10 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
             middle_name: portfolioInformation?.middle_name || '',
             last_name: portfolioInformation?.last_name || '',
             email: portfolioInformation?.email || '',
+            role_title: portfolioInformation?.role_title || '',
+            tech_stack: portfolioInformation?.tech_stack || '',
             address: portfolioInformation?.address || '',
+            short_location: portfolioInformation?.short_location || '',
             latitude: portfolioInformation?.latitude || '',
             longitude: portfolioInformation?.longitude || '',
             phone_number: portfolioInformation?.phone_number || '',
@@ -86,10 +122,23 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
             description: portfolioInformation?.description || '',
             seo_title: portfolioInformation?.seo_title || '',
             seo_metatags: portfolioInformation?.seo_metatags || '',
+            is_available: portfolioInformation?.is_available ?? true,
+            availability_text:
+                portfolioInformation?.availability_text ||
+                'Available for work',
+            stats:
+                portfolioInformation?.stats &&
+                portfolioInformation.stats.length > 0
+                    ? portfolioInformation.stats
+                    : DEFAULT_STATS,
+            skills: portfolioInformation?.skills || [],
             profile_image: null,
             cover_image: null,
+            cv_file: null,
         },
     );
+
+    const [skillInput, setSkillInput] = useState('');
 
     // Track if errors have been shown to prevent duplicate toasts
     const [shownErrors, setShownErrors] = useState<Set<string>>(new Set());
@@ -105,6 +154,10 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
             (m) => m.collection_name === 'cover_images',
         )?.original_url ?? null;
 
+    const existingCv = portfolioInformation?.media?.find(
+        (m) => m.collection_name === 'cv_documents',
+    ) ?? null;
+
     // Image preview states
     const [profileImagePreview, setProfileImagePreview] =
         useState(existingProfileImage);
@@ -117,7 +170,6 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
 
         if (errorKeys.length > 0) {
             errorKeys.forEach((key) => {
-                // Avoid showing duplicate toasts for the same error
                 if (!shownErrors.has(key)) {
                     const errorMessage = errors[key as keyof typeof errors];
 
@@ -127,7 +179,7 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                                 <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <p className="font-semibold capitalize">
-                                        {key.replace(/_/g, ' ')}
+                                        {key.replace(/_/g, ' ').replace(/\./g, ' ')}
                                     </p>
                                     <p className="text-sm mt-1">{errorMessage}</p>
                                 </div>
@@ -139,7 +191,6 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                             }
                         );
 
-                        // Mark this error as shown
                         setShownErrors((prev) => new Set(prev).add(key));
                     }
                 }
@@ -153,7 +204,6 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
     ) => {
         setData(name, value as any);
 
-        // Clear the error for this field when user starts editing
         if (errors[name]) {
             setShownErrors((prev) => {
                 const newSet = new Set(prev);
@@ -164,10 +214,56 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
         }
     };
 
+    // ── Stats repeater helpers ──
+    const updateStat = (
+        idx: number,
+        field: keyof HeroStat,
+        value: string,
+    ) => {
+        const next = [...data.stats];
+        next[idx] = { ...next[idx], [field]: value };
+        setData('stats', next);
+    };
+
+    const addStat = () => {
+        setData('stats', [...data.stats, { value: '', label: '' }]);
+    };
+
+    const removeStat = (idx: number) => {
+        setData(
+            'stats',
+            data.stats.filter((_, i) => i !== idx),
+        );
+    };
+
+    // ── Skills tag helpers ──
+    const addSkill = () => {
+        const value = skillInput.trim();
+
+        if (value && !data.skills.includes(value)) {
+            setData('skills', [...data.skills, value]);
+        }
+
+        setSkillInput('');
+    };
+
+    const removeSkill = (skill: string) => {
+        setData(
+            'skills',
+            data.skills.filter((s) => s !== skill),
+        );
+    };
+
+    const handleSkillKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            addSkill();
+        }
+    };
+
     const submit = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        // Reset shown errors on new submission
         setShownErrors(new Set());
 
         const payload = {
@@ -187,7 +283,6 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                     );
                 },
                 onError: () => {
-                    // Errors will be caught by the useEffect above
                     toast.error('Validation failed. Please check the errors below.', {
                         position: 'top-right',
                         duration: 4000,
@@ -207,7 +302,6 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                     );
                 },
                 onError: () => {
-                    // Errors will be caught by the useEffect above
                     toast.error('Validation failed. Please check the errors below.', {
                         position: 'top-right',
                         duration: 4000,
@@ -299,6 +393,221 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                                 </div>
                             </section>
 
+                            {/* Hero / Display Settings */}
+                            <section>
+                                <div className="mb-6 flex items-center gap-2 border-b border-border pb-4">
+                                    <Sparkles className="h-4 w-4 text-primary" />
+                                    <h3 className="text-sm font-semibold tracking-wider text-muted-foreground uppercase">
+                                        Hero Section Settings
+                                    </h3>
+                                </div>
+
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                    <InputField
+                                        name="role_title"
+                                        label="Role / Title"
+                                        value={data.role_title}
+                                        onChange={formFieldOnChange}
+                                        error={errors.role_title}
+                                        placeholder="Full Stack Developer"
+                                        icon={Briefcase}
+                                    />
+                                    <InputField
+                                        name="tech_stack"
+                                        label="Tech Stack Badge"
+                                        value={data.tech_stack}
+                                        onChange={formFieldOnChange}
+                                        error={errors.tech_stack}
+                                        placeholder="React + Laravel"
+                                        icon={Code2}
+                                    />
+                                </div>
+
+                                {/* Availability toggle */}
+                                <div className="mt-4 flex flex-col gap-4 rounded-lg border border-border p-4 md:flex-row md:items-center md:justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <Switch
+                                            id="is_available"
+                                            checked={data.is_available}
+                                            onCheckedChange={(checked) =>
+                                                formFieldOnChange(
+                                                    'is_available',
+                                                    checked,
+                                                )
+                                            }
+                                        />
+                                        <Label
+                                            htmlFor="is_available"
+                                            className="cursor-pointer"
+                                        >
+                                            Show "Available for work" badge
+                                        </Label>
+                                    </div>
+                                    <div className="w-full md:w-72">
+                                        <Input
+                                            value={data.availability_text}
+                                            onChange={(e) =>
+                                                formFieldOnChange(
+                                                    'availability_text',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Available for work"
+                                            disabled={!data.is_available}
+                                        />
+                                        {errors.availability_text && (
+                                            <p className="mt-1 text-xs text-destructive">
+                                                {errors.availability_text}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Stats repeater */}
+                                <div className="mt-6">
+                                    <div className="mb-3 flex items-center justify-between">
+                                        <Label>Hero Stats (stat pills)</Label>
+                                        <Button
+                                            type="button"
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={addStat}
+                                        >
+                                            <Plus className="mr-1 h-3.5 w-3.5" />
+                                            Add Stat
+                                        </Button>
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        {data.stats.map((stat, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="flex items-start gap-3 rounded-lg border border-border p-3"
+                                            >
+                                                <div className="flex-1">
+                                                    <Label className="mb-1 block text-xs text-muted-foreground">
+                                                        Value
+                                                    </Label>
+                                                    <Input
+                                                        value={stat.value}
+                                                        onChange={(e) =>
+                                                            updateStat(
+                                                                idx,
+                                                                'value',
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="3+"
+                                                    />
+                                                    {errors[
+                                                        `stats.${idx}.value` as keyof typeof errors
+                                                        ] && (
+                                                        <p className="mt-1 text-xs text-destructive">
+                                                            {
+                                                                errors[
+                                                                    `stats.${idx}.value` as keyof typeof errors
+                                                                    ]
+                                                            }
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <Label className="mb-1 block text-xs text-muted-foreground">
+                                                        Label
+                                                    </Label>
+                                                    <Input
+                                                        value={stat.label}
+                                                        onChange={(e) =>
+                                                            updateStat(
+                                                                idx,
+                                                                'label',
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="Years Exp."
+                                                    />
+                                                    {errors[
+                                                        `stats.${idx}.label` as keyof typeof errors
+                                                        ] && (
+                                                        <p className="mt-1 text-xs text-destructive">
+                                                            {
+                                                                errors[
+                                                                    `stats.${idx}.label` as keyof typeof errors
+                                                                    ]
+                                                            }
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    type="button"
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="mt-5 text-destructive hover:text-destructive"
+                                                    onClick={() =>
+                                                        removeStat(idx)
+                                                    }
+                                                    disabled={
+                                                        data.stats.length <= 1
+                                                    }
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Skills tag editor */}
+                                <div className="mt-6">
+                                    <Label className="mb-2 block">
+                                        Skills / Tech Tags (shown as chips in Hero)
+                                    </Label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            value={skillInput}
+                                            onChange={(e) =>
+                                                setSkillInput(e.target.value)
+                                            }
+                                            onKeyDown={handleSkillKeyDown}
+                                            placeholder="Type a skill and press Enter (e.g. React)"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={addSkill}
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    {data.skills.length > 0 && (
+                                        <div className="mt-3 flex flex-wrap gap-2">
+                                            {data.skills.map((skill) => (
+                                                <span
+                                                    key={skill}
+                                                    className="flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1 text-xs"
+                                                >
+                                                    {skill}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() =>
+                                                            removeSkill(skill)
+                                                        }
+                                                        className="text-muted-foreground hover:text-destructive"
+                                                    >
+                                                        <X className="h-3 w-3" />
+                                                    </button>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    {errors.skills && (
+                                        <p className="mt-1 text-xs text-destructive">
+                                            {errors.skills}
+                                        </p>
+                                    )}
+                                </div>
+                            </section>
+
                             {/* Location Information */}
                             <section>
                                 <div className="mb-6 flex items-center gap-2 border-b border-border pb-4">
@@ -307,16 +616,25 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                                         Location Information
                                     </h3>
                                 </div>
-                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                                     <InputField
                                         name="address"
-                                        label="Address"
+                                        label="Full Address"
                                         value={data.address}
                                         onChange={formFieldOnChange}
                                         error={errors.address}
                                         required
                                         placeholder="Enter full address"
                                         icon={Home}
+                                    />
+                                    <InputField
+                                        name="short_location"
+                                        label="Short Location (Hero badge)"
+                                        value={data.short_location}
+                                        onChange={formFieldOnChange}
+                                        error={errors.short_location}
+                                        placeholder="Kathmandu, Nepal"
+                                        icon={MapPin}
                                     />
                                     <NumberField
                                         name="latitude"
@@ -384,15 +702,87 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                                     </h3>
                                 </div>
                                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                    <InputField
-                                        name="cv_link"
-                                        label="CV Link"
-                                        value={data.cv_link}
-                                        onChange={formFieldOnChange}
-                                        error={errors.cv_link}
-                                        placeholder="https://your-cv-link.com"
-                                        icon={File}
-                                    />
+                                    <div>
+                                        <InputField
+                                            name="cv_link"
+                                            label="CV Link (fallback URL)"
+                                            value={data.cv_link}
+                                            onChange={formFieldOnChange}
+                                            error={errors.cv_link}
+                                            placeholder="https://drive.google.com/..."
+                                            icon={File}
+                                        />
+                                        <p className="mt-1 text-xs text-muted-foreground">
+                                            Used only if no CV file is uploaded below.
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <Label className="mb-1.5 block">
+                                            CV File (PDF or DOCX)
+                                        </Label>
+                                        {existingCv && !data.cv_file && (
+                                            <div className="mb-2 flex items-center justify-between rounded-lg border border-border p-2.5">
+                                                <a
+                                                    href={existingCv.original_url}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="flex items-center gap-2 text-sm text-primary hover:underline"
+                                                >
+                                                    <FileText className="h-4 w-4" />
+                                                    {existingCv.file_name}
+                                                </a>
+                                            </div>
+                                        )}
+                                        {data.cv_file && (
+                                            <div className="mb-2 flex items-center justify-between rounded-lg border border-border p-2.5">
+                                                <span className="flex items-center gap-2 text-sm">
+                                                    <FileText className="h-4 w-4" />
+                                                    {data.cv_file.name}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() =>
+                                                        formFieldOnChange(
+                                                            'cv_file',
+                                                            null,
+                                                        )
+                                                    }
+                                                    className="text-muted-foreground hover:text-destructive"
+                                                >
+                                                    <X className="h-4 w-4" />
+                                                </button>
+                                            </div>
+                                        )}
+                                        <label
+                                            htmlFor="cv_file"
+                                            className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-dashed border-border p-3 text-sm text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+                                        >
+                                            <Upload className="h-4 w-4" />
+                                            {existingCv || data.cv_file
+                                                ? 'Replace CV file'
+                                                : 'Upload CV file'}
+                                            <input
+                                                id="cv_file"
+                                                type="file"
+                                                accept=".pdf,.doc,.docx"
+                                                className="hidden"
+                                                onChange={(e) =>
+                                                    formFieldOnChange(
+                                                        'cv_file',
+                                                        e.target.files?.[0] ||
+                                                        null,
+                                                    )
+                                                }
+                                            />
+                                        </label>
+                                        {errors.cv_file && (
+                                            <p className="mt-1 text-xs text-destructive">
+                                                {errors.cv_file}
+                                            </p>
+                                        )}
+                                    </div>
+
                                     <InputField
                                         name="linkedin_link"
                                         label="LinkedIn"
@@ -434,11 +824,11 @@ export default function PortFolioInformationForm({ portfolioInformation, mode,
                                 <div className="space-y-4">
                                     <InputField
                                         name="small_description"
-                                        label="Short Description"
+                                        label="Short Description (Hero tagline)"
                                         value={data.small_description || ''}
                                         onChange={formFieldOnChange}
                                         error={errors.small_description}
-                                        placeholder="Short bio (max 160 chars)"
+                                        placeholder="Short bio (max 500 chars)"
                                     />
 
                                     <TextareaField

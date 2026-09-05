@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\AboutInformationController;
+use App\Http\Controllers\Api\TechTalkDetailController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortFolioInformation\PortfolioInformationController;
@@ -14,6 +16,9 @@ use App\Http\Controllers\UserManagement\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'landing'])->name('home');
+//Route::get('/tech-talk-details/{techTalk}', [TechTalkDetailController::class, 'show'])->name('tech-talk-details.show');
+Route::get('tech-talk-details/{tech_talk:slug}', [TechTalkDetailController::class, 'show'])
+    ->name('tech-talks.public.show');
 // routes/web.php - Your routes are CORRECT!
 Route::middleware(['auth', 'verified'])
     ->prefix('admin')
@@ -34,6 +39,7 @@ Route::middleware(['auth', 'verified'])
         Route::resource('stats', StatController::class);
         Route::resource('abouts', AboutController::class);
         Route::resource('portfolio-informations', PortfolioInformationController::class);
+        Route::resource('about-informations', AboutInformationController::class);
     });
 
 Route::get('/lang/{locale}', function (string $locale) {

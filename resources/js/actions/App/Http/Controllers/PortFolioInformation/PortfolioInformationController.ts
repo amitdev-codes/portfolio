@@ -163,7 +163,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:25
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -178,7 +178,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:25
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -187,7 +187,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:25
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -197,7 +197,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:25
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -207,7 +207,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:25
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -219,7 +219,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 export const show = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 show.url = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -267,7 +267,7 @@ show.url = (args: { portfolio_information: number | { id: number } } | [portfoli
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 show.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -277,7 +277,7 @@ show.get = (args: { portfolio_information: number | { id: number } } | [portfoli
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 show.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -287,7 +287,7 @@ show.head = (args: { portfolio_information: number | { id: number } } | [portfol
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 const showForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -297,7 +297,7 @@ const showForm = (args: { portfolio_information: number | { id: number } } | [po
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 showForm.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -307,7 +307,7 @@ showForm.get = (args: { portfolio_information: number | { id: number } } | [port
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:46
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 showForm.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -324,7 +324,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 export const edit = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -339,7 +339,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 edit.url = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -372,7 +372,7 @@ edit.url = (args: { portfolio_information: number | { id: number } } | [portfoli
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 edit.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -382,7 +382,7 @@ edit.get = (args: { portfolio_information: number | { id: number } } | [portfoli
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 edit.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -392,7 +392,7 @@ edit.head = (args: { portfolio_information: number | { id: number } } | [portfol
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 const editForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -402,7 +402,7 @@ const editForm = (args: { portfolio_information: number | { id: number } } | [po
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 editForm.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -412,7 +412,7 @@ editForm.get = (args: { portfolio_information: number | { id: number } } | [port
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:51
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
 */
 editForm.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -429,7 +429,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 export const update = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -444,7 +444,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 update.url = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -477,7 +477,7 @@ update.url = (args: { portfolio_information: number | { id: number } } | [portfo
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 update.put = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -487,7 +487,7 @@ update.put = (args: { portfolio_information: number | { id: number } } | [portfo
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 update.patch = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -497,7 +497,7 @@ update.patch = (args: { portfolio_information: number | { id: number } } | [port
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 const updateForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -512,7 +512,7 @@ const updateForm = (args: { portfolio_information: number | { id: number } } | [
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 updateForm.put = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -527,7 +527,7 @@ updateForm.put = (args: { portfolio_information: number | { id: number } } | [po
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:57
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 updateForm.patch = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -544,7 +544,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:78
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 export const destroy = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -559,7 +559,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:78
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 destroy.url = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -592,7 +592,7 @@ destroy.url = (args: { portfolio_information: number | { id: number } } | [portf
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:78
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 destroy.delete = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -602,7 +602,7 @@ destroy.delete = (args: { portfolio_information: number | { id: number } } | [po
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:78
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 const destroyForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -617,7 +617,7 @@ const destroyForm = (args: { portfolio_information: number | { id: number } } | 
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:78
+* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
 */
 destroyForm.delete = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
