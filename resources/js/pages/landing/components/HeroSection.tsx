@@ -1,13 +1,13 @@
 import { Link } from '@inertiajs/react';
 import {
-    Github,
-    Linkedin,
     Mail,
     Phone,
     ArrowUpRight,
     MapPin,
     Code2,
     Download,
+    Github,
+    Linkedin,
 } from 'lucide-react';
 
 interface HeroStat {
