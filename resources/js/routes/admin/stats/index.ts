@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\StatController::index
 * @see app/Http/Controllers/StatController.php:14
@@ -42,43 +42,6 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\StatController::index
-* @see app/Http/Controllers/StatController.php:14
-* @route '/admin/stats'
-*/
-const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::index
-* @see app/Http/Controllers/StatController.php:14
-* @route '/admin/stats'
-*/
-indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::index
-* @see app/Http/Controllers/StatController.php:14
-* @route '/admin/stats'
-*/
-indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\StatController::create
@@ -125,43 +88,6 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\StatController::create
-* @see app/Http/Controllers/StatController.php:19
-* @route '/admin/stats/create'
-*/
-const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::create
-* @see app/Http/Controllers/StatController.php:19
-* @route '/admin/stats/create'
-*/
-createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::create
-* @see app/Http/Controllers/StatController.php:19
-* @route '/admin/stats/create'
-*/
-createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-create.form = createForm
-
-/**
 * @see \App\Http\Controllers\StatController::store
 * @see app/Http/Controllers/StatController.php:24
 * @route '/admin/stats'
@@ -194,28 +120,6 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-
-/**
-* @see \App\Http\Controllers\StatController::store
-* @see app/Http/Controllers/StatController.php:24
-* @route '/admin/stats'
-*/
-const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::store
-* @see app/Http/Controllers/StatController.php:24
-* @route '/admin/stats'
-*/
-storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\StatController::show
@@ -286,43 +190,6 @@ show.head = (args: { stat: number | { id: number } } | [stat: number | { id: num
 })
 
 /**
-* @see \App\Http\Controllers\StatController::show
-* @see app/Http/Controllers/StatController.php:33
-* @route '/admin/stats/{stat}'
-*/
-const showForm = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::show
-* @see app/Http/Controllers/StatController.php:33
-* @route '/admin/stats/{stat}'
-*/
-showForm.get = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::show
-* @see app/Http/Controllers/StatController.php:33
-* @route '/admin/stats/{stat}'
-*/
-showForm.head = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-show.form = showForm
-
-/**
 * @see \App\Http\Controllers\StatController::edit
 * @see app/Http/Controllers/StatController.php:38
 * @route '/admin/stats/{stat}/edit'
@@ -389,43 +256,6 @@ edit.head = (args: { stat: number | { id: number } } | [stat: number | { id: num
     url: edit.url(args, options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\StatController::edit
-* @see app/Http/Controllers/StatController.php:38
-* @route '/admin/stats/{stat}/edit'
-*/
-const editForm = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::edit
-* @see app/Http/Controllers/StatController.php:38
-* @route '/admin/stats/{stat}/edit'
-*/
-editForm.get = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::edit
-* @see app/Http/Controllers/StatController.php:38
-* @route '/admin/stats/{stat}/edit'
-*/
-editForm.head = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\StatController::update
@@ -496,53 +326,6 @@ update.patch = (args: { stat: number | { id: number } } | [stat: number | { id: 
 })
 
 /**
-* @see \App\Http\Controllers\StatController::update
-* @see app/Http/Controllers/StatController.php:43
-* @route '/admin/stats/{stat}'
-*/
-const updateForm = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::update
-* @see app/Http/Controllers/StatController.php:43
-* @route '/admin/stats/{stat}'
-*/
-updateForm.put = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::update
-* @see app/Http/Controllers/StatController.php:43
-* @route '/admin/stats/{stat}'
-*/
-updateForm.patch = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PATCH',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-update.form = updateForm
-
-/**
 * @see \App\Http\Controllers\StatController::destroy
 * @see app/Http/Controllers/StatController.php:52
 * @route '/admin/stats/{stat}'
@@ -599,38 +382,6 @@ destroy.delete = (args: { stat: number | { id: number } } | [stat: number | { id
     url: destroy.url(args, options),
     method: 'delete',
 })
-
-/**
-* @see \App\Http\Controllers\StatController::destroy
-* @see app/Http/Controllers/StatController.php:52
-* @route '/admin/stats/{stat}'
-*/
-const destroyForm = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\StatController::destroy
-* @see app/Http/Controllers/StatController.php:52
-* @route '/admin/stats/{stat}'
-*/
-destroyForm.delete = (args: { stat: number | { id: number } } | [stat: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-destroy.form = destroyForm
 
 const stats = {
     index: Object.assign(index, index),

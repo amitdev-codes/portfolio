@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Api\TechTalkDetailController::show
 * @see app/Http/Controllers/Api/TechTalkDetailController.php:21
@@ -66,43 +66,6 @@ show.head = (args: { tech_talk: string | { slug: string } } | [tech_talk: string
     url: show.url(args, options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\Api\TechTalkDetailController::show
-* @see app/Http/Controllers/Api/TechTalkDetailController.php:21
-* @route '/tech-talk-details/{tech_talk}'
-*/
-const showForm = (args: { tech_talk: string | { slug: string } } | [tech_talk: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\Api\TechTalkDetailController::show
-* @see app/Http/Controllers/Api/TechTalkDetailController.php:21
-* @route '/tech-talk-details/{tech_talk}'
-*/
-showForm.get = (args: { tech_talk: string | { slug: string } } | [tech_talk: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\Api\TechTalkDetailController::show
-* @see app/Http/Controllers/Api/TechTalkDetailController.php:21
-* @route '/tech-talk-details/{tech_talk}'
-*/
-showForm.head = (args: { tech_talk: string | { slug: string } } | [tech_talk: string | { slug: string } ] | string | { slug: string }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-show.form = showForm
 
 const TechTalkDetailController = { show }
 

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\AboutController::index
 * @see app/Http/Controllers/AboutController.php:12
@@ -42,43 +42,6 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\AboutController::index
-* @see app/Http/Controllers/AboutController.php:12
-* @route '/admin/abouts'
-*/
-const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::index
-* @see app/Http/Controllers/AboutController.php:12
-* @route '/admin/abouts'
-*/
-indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::index
-* @see app/Http/Controllers/AboutController.php:12
-* @route '/admin/abouts'
-*/
-indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\AboutController::create
@@ -125,43 +88,6 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\AboutController::create
-* @see app/Http/Controllers/AboutController.php:17
-* @route '/admin/abouts/create'
-*/
-const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::create
-* @see app/Http/Controllers/AboutController.php:17
-* @route '/admin/abouts/create'
-*/
-createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::create
-* @see app/Http/Controllers/AboutController.php:17
-* @route '/admin/abouts/create'
-*/
-createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-create.form = createForm
-
-/**
 * @see \App\Http\Controllers\AboutController::store
 * @see app/Http/Controllers/AboutController.php:22
 * @route '/admin/abouts'
@@ -194,28 +120,6 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-
-/**
-* @see \App\Http\Controllers\AboutController::store
-* @see app/Http/Controllers/AboutController.php:22
-* @route '/admin/abouts'
-*/
-const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::store
-* @see app/Http/Controllers/AboutController.php:22
-* @route '/admin/abouts'
-*/
-storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\AboutController::show
@@ -286,43 +190,6 @@ show.head = (args: { about: number | { id: number } } | [about: number | { id: n
 })
 
 /**
-* @see \App\Http\Controllers\AboutController::show
-* @see app/Http/Controllers/AboutController.php:31
-* @route '/admin/abouts/{about}'
-*/
-const showForm = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::show
-* @see app/Http/Controllers/AboutController.php:31
-* @route '/admin/abouts/{about}'
-*/
-showForm.get = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::show
-* @see app/Http/Controllers/AboutController.php:31
-* @route '/admin/abouts/{about}'
-*/
-showForm.head = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-show.form = showForm
-
-/**
 * @see \App\Http\Controllers\AboutController::edit
 * @see app/Http/Controllers/AboutController.php:36
 * @route '/admin/abouts/{about}/edit'
@@ -389,43 +256,6 @@ edit.head = (args: { about: number | { id: number } } | [about: number | { id: n
     url: edit.url(args, options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\AboutController::edit
-* @see app/Http/Controllers/AboutController.php:36
-* @route '/admin/abouts/{about}/edit'
-*/
-const editForm = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::edit
-* @see app/Http/Controllers/AboutController.php:36
-* @route '/admin/abouts/{about}/edit'
-*/
-editForm.get = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::edit
-* @see app/Http/Controllers/AboutController.php:36
-* @route '/admin/abouts/{about}/edit'
-*/
-editForm.head = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\AboutController::update
@@ -496,53 +326,6 @@ update.patch = (args: { about: number | { id: number } } | [about: number | { id
 })
 
 /**
-* @see \App\Http\Controllers\AboutController::update
-* @see app/Http/Controllers/AboutController.php:41
-* @route '/admin/abouts/{about}'
-*/
-const updateForm = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::update
-* @see app/Http/Controllers/AboutController.php:41
-* @route '/admin/abouts/{about}'
-*/
-updateForm.put = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::update
-* @see app/Http/Controllers/AboutController.php:41
-* @route '/admin/abouts/{about}'
-*/
-updateForm.patch = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PATCH',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-update.form = updateForm
-
-/**
 * @see \App\Http\Controllers\AboutController::destroy
 * @see app/Http/Controllers/AboutController.php:50
 * @route '/admin/abouts/{about}'
@@ -599,38 +382,6 @@ destroy.delete = (args: { about: number | { id: number } } | [about: number | { 
     url: destroy.url(args, options),
     method: 'delete',
 })
-
-/**
-* @see \App\Http\Controllers\AboutController::destroy
-* @see app/Http/Controllers/AboutController.php:50
-* @route '/admin/abouts/{about}'
-*/
-const destroyForm = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\AboutController::destroy
-* @see app/Http/Controllers/AboutController.php:50
-* @route '/admin/abouts/{about}'
-*/
-destroyForm.delete = (args: { about: number | { id: number } } | [about: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-destroy.form = destroyForm
 
 const AboutController = { index, create, store, show, edit, update, destroy }
 

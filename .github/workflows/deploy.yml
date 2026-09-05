@@ -23,12 +23,9 @@ jobs:
       - name: Fix file ownership after composer
         run: sudo chown -R $(id -u):$(id -g) .
 
-      - name: Debug Wayfinder directly
-        run: docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo php84-ctype php84-xml php84-dom php84-simplexml php84-xmlwriter php84-session php84-pdo php84-curl && ln -sf /usr/bin/php84 /usr/bin/php && echo '--- PHP VERSION ---' && php -v && echo '--- ARTISAN CHECK ---' && php artisan --version && echo '--- WAYFINDER RUN ---' && php artisan wayfinder:generate --with-form -v"
-
       - name: Build Frontend Assets (Yarn)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo \
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo php84-ctype php84-xml php84-dom php84-simplexml php84-xmlwriter php84-session php84-pdo php84-curl \
             && ln -sf /usr/bin/php84 /usr/bin/php \
             && yarn install && yarn build"
 

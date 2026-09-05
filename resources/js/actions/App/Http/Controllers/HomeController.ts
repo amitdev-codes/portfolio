@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\HomeController::landing
 * @see app/Http/Controllers/HomeController.php:15
@@ -42,43 +42,6 @@ landing.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: landing.url(options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:15
-* @route '/'
-*/
-const landingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: landing.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:15
-* @route '/'
-*/
-landingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: landing.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\HomeController::landing
-* @see app/Http/Controllers/HomeController.php:15
-* @route '/'
-*/
-landingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: landing.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-landing.form = landingForm
 
 const HomeController = { landing }
 

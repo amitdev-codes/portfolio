@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::index
 * @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:15
@@ -42,43 +42,6 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::index
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:15
-* @route '/admin/portfolio-informations'
-*/
-const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::index
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:15
-* @route '/admin/portfolio-informations'
-*/
-indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::index
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:15
-* @route '/admin/portfolio-informations'
-*/
-indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: index.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::create
@@ -125,43 +88,6 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::create
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:20
-* @route '/admin/portfolio-informations/create'
-*/
-const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::create
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:20
-* @route '/admin/portfolio-informations/create'
-*/
-createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::create
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:20
-* @route '/admin/portfolio-informations/create'
-*/
-createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: create.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-create.form = createForm
-
-/**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
 * @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
 * @route '/admin/portfolio-informations'
@@ -194,28 +120,6 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
-* @route '/admin/portfolio-informations'
-*/
-const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::store
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:27
-* @route '/admin/portfolio-informations'
-*/
-storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: store.url(options),
-    method: 'post',
-})
-
-store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
@@ -286,43 +190,6 @@ show.head = (args: { portfolio_information: number | { id: number } } | [portfol
 })
 
 /**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-const showForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-showForm.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::show
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:53
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-showForm.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: show.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-show.form = showForm
-
-/**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
 * @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
 * @route '/admin/portfolio-informations/{portfolio_information}/edit'
@@ -389,43 +256,6 @@ edit.head = (args: { portfolio_information: number | { id: number } } | [portfol
     url: edit.url(args, options),
     method: 'head',
 })
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
-* @route '/admin/portfolio-informations/{portfolio_information}/edit'
-*/
-const editForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
-* @route '/admin/portfolio-informations/{portfolio_information}/edit'
-*/
-editForm.get = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::edit
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:58
-* @route '/admin/portfolio-informations/{portfolio_information}/edit'
-*/
-editForm.head = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
@@ -496,53 +326,6 @@ update.patch = (args: { portfolio_information: number | { id: number } } | [port
 })
 
 /**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-const updateForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-updateForm.put = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PUT',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::update
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:68
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-updateForm.patch = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: update.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'PATCH',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-update.form = updateForm
-
-/**
 * @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
 * @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
 * @route '/admin/portfolio-informations/{portfolio_information}'
@@ -599,38 +382,6 @@ destroy.delete = (args: { portfolio_information: number | { id: number } } | [po
     url: destroy.url(args, options),
     method: 'delete',
 })
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-const destroyForm = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\PortFolioInformation\PortfolioInformationController::destroy
-* @see app/Http/Controllers/PortFolioInformation/PortfolioInformationController.php:94
-* @route '/admin/portfolio-informations/{portfolio_information}'
-*/
-destroyForm.delete = (args: { portfolio_information: number | { id: number } } | [portfolio_information: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: destroy.url(args, {
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'DELETE',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'post',
-})
-
-destroy.form = destroyForm
 
 const portfolioInformations = {
     index: Object.assign(index, index),
