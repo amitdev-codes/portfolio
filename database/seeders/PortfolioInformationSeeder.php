@@ -3,69 +3,77 @@
 namespace Database\Seeders;
 
 use App\Models\PortfolioInformation;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PortfolioInformationSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        DB::table('portfolio_informations')->truncate();
-
-        DB::table('portfolio_informations')->insert([
-            // 👤 Basic Info
+        $data = [
             'first_name' => 'Amit',
             'middle_name' => 'Kumar',
             'last_name' => 'Dev',
             'role_title' => 'Full Stack Developer',
-            'tech_stack' => 'React + Laravel',
+            'tech_stack' => 'Laravel · React · PHP',
 
-            // 📍 Address & Location
             'address' => 'Sanepa-2, Lalitpur, Kathmandu, Nepal',
             'short_location' => 'Kathmandu, Nepal',
             'latitude' => 27.6780,
             'longitude' => 85.3167,
 
-            // 📞 Contact
             'phone_number' => null,
             'mobile_number' => null,
             'email' => 'devopsamit4@gmail.com',
 
-            // 🔗 Links
             'cv_link' => null,
             'linkedin_link' => 'https://www.linkedin.com/in/amitdev',
             'github_link' => 'https://github.com/amitdev',
             'website_link' => null,
 
-            // 📝 Descriptions
-            'small_description' => 'I craft high-performance web applications with React & Laravel — turning complex problems into elegant, scalable solutions.',
-            'description' => 'I am Amit Kumar Dev, a Laravel-focused full stack developer based in Nepal. I specialize in building scalable web applications using Laravel, React, and modern web technologies. I have experience in backend architecture, API development, and dynamic frontend integrations. Passionate about clean code, performance optimization, and real-world problem solving.',
+            'small_description' => 'Building scalable web platforms with Laravel & React — from grievance systems and PMIS to real estate, recruitment, and municipal e-services.',
+            'description' => 'I am Amit Kumar Dev, a Laravel-focused full stack developer based in Nepal with 6+ years of hands-on experience. I design and ship production systems for government and enterprise teams — APIs, admin dashboards, and polished React frontends — with a focus on clean architecture, performance, and real-world reliability.',
 
-            // 📊 Hero Stats
-            'stats' => json_encode([
-                ['value' => '3+', 'label' => 'Years Exp.'],
-                ['value' => '20+', 'label' => 'Projects'],
+            'stats' => [
+                ['value' => '6+', 'label' => 'Years Exp.'],
+                ['value' => '25+', 'label' => 'Projects'],
                 ['value' => '15+', 'label' => 'Clients'],
                 ['value' => '99%', 'label' => 'Uptime'],
-            ]),
+            ],
 
-            // ✅ Availability
+            'skills' => [
+                'Laravel',
+                'PHP',
+                'React',
+                'TypeScript',
+                'Vue.js',
+                'MySQL',
+                'PostgreSQL',
+                'Redis',
+                'REST APIs',
+                'Inertia.js',
+                'Tailwind CSS',
+                'Docker',
+                'Linux',
+                'Git',
+                'CI/CD',
+                'Nginx',
+            ],
+
             'is_available' => true,
-            'availability_text' => 'Available for work',
+            'availability_text' => 'Open to new projects',
 
-            // 🔍 SEO
-            'seo_title' => 'Amit Kumar Dev | Laravel Developer Portfolio',
-            'seo_metatags' => 'Laravel Developer Nepal, Amit Kumar Dev, Full Stack Developer Nepal, Laravel React Developer, PHP Developer Nepal, Web Developer Kathmandu',
+            'seo_title' => 'Amit Kumar Dev | Laravel & React Full Stack Developer',
+            'seo_metatags' => 'Laravel Developer Nepal, Amit Kumar Dev, Full Stack Developer, React Laravel, PHP Developer Kathmandu, Web Developer Nepal',
 
-            // 🖼 Images
-            'profile_image' => 'profile.jpg',
-            'cover_image' => 'cover.jpg',
-
-            // ⚙️ Status
             'is_active' => true,
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
-        ]);
+        ];
+
+        $portfolio = PortfolioInformation::query()->first();
+
+        if ($portfolio) {
+            $portfolio->update($data);
+        } else {
+            PortfolioInformation::create($data);
+        }
     }
 }

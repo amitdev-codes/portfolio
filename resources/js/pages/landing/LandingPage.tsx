@@ -103,9 +103,13 @@ export default function LandingPage({
     useScrollAnimation();
     const navBg = isScrolled
         ? dm
-            ? 'bg-[#0f0f13]/95 backdrop-blur-2xl shadow-sm shadow-slate-900 py-3'
+            ? 'bg-[#0f0f13]/95 backdrop-blur-2xl shadow-sm shadow-slate-900/40 py-3'
             : 'bg-white/90 backdrop-blur-2xl shadow-sm py-3'
         : 'bg-transparent py-6';
+
+    const cursorClass = dm
+        ? 'bg-indigo-400 mix-blend-screen'
+        : 'bg-indigo-600 mix-blend-multiply';
 
     return (
         <>
@@ -132,7 +136,7 @@ export default function LandingPage({
             >
                 <div
                     ref={cursorRef}
-                    className="pointer-events-none fixed z-999 h-3 w-3 rounded-full bg-indigo-600 mix-blend-multiply transition-all duration-150"
+                    className={`pointer-events-none fixed z-999 h-3 w-3 rounded-full transition-all duration-150 ${cursorClass}`}
                     style={{ transform: 'translate(-50%, -50%)' }}
                 />
                 <Navbar
@@ -168,6 +172,7 @@ export default function LandingPage({
                     bgCard={bgCard}
                     textPrimary={textPrimary}
                     textMuted={textMuted}
+                    darkMode={darkMode}
                 />
                 <TechTalkSection
                     darkMode={darkMode}

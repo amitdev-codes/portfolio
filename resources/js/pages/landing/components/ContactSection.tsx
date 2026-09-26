@@ -79,9 +79,15 @@ export default function ContactSection({
                             href={href}
                             onMouseEnter={() => handleCursorHover(true)}
                             onMouseLeave={() => handleCursorHover(false)}
-                            className={`fade-up ${bgCard} rounded-2xl border p-6 ${borderColor} text-center transition-all hover:-translate-y-1 hover:border-indigo-400 hover:shadow-lg`}
+                            className={`fade-up ${bgCard} flex h-full flex-col items-center rounded-2xl border p-6 ${borderColor} text-center transition-all hover:-translate-y-1 hover:border-indigo-400 hover:shadow-lg`}
                         >
-                            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                            <div
+                                className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ${
+                                    dm
+                                        ? 'bg-indigo-500/15 text-indigo-300'
+                                        : 'bg-indigo-50 text-indigo-600'
+                                }`}
+                            >
                                 <Icon size={22} />
                             </div>
                             <h3 className={`font-black ${textPrimary} mb-1`}>
@@ -101,29 +107,45 @@ export default function ContactSection({
                         <input
                             type="text"
                             placeholder="Your Name"
-                            className={`px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none ${textPrimary}`}
+                            className={`px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 ${
+                                dm
+                                    ? 'focus:ring-indigo-500/20'
+                                    : 'focus:ring-indigo-100'
+                            } ${textPrimary}`}
                         />
                         <input
                             type="email"
                             placeholder="Your Email"
-                            className={`px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none ${textPrimary}`}
+                            className={`px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 ${
+                                dm
+                                    ? 'focus:ring-indigo-500/20'
+                                    : 'focus:ring-indigo-100'
+                            } ${textPrimary}`}
                         />
                     </div>
                     <input
                         type="text"
                         placeholder="Subject"
-                        className={`w-full px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none ${textPrimary}`}
+                        className={`w-full px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 ${
+                            dm
+                                ? 'focus:ring-indigo-500/20'
+                                : 'focus:ring-indigo-100'
+                        } ${textPrimary}`}
                     />
                     <textarea
                         placeholder="Tell me about your project..."
                         rows={5}
-                        className={`w-full px-4 py-3.5 ${bg} border ${borderColor} resize-none rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none ${textPrimary}`}
+                        className={`w-full resize-none px-4 py-3.5 ${bg} border ${borderColor} rounded-xl text-sm font-medium transition-all focus:border-indigo-400 focus:outline-none focus:ring-2 ${
+                            dm
+                                ? 'focus:ring-indigo-500/20'
+                                : 'focus:ring-indigo-100'
+                        } ${textPrimary}`}
                     />
                     <button
                         type="button"
                         onMouseEnter={() => handleCursorHover(true)}
                         onMouseLeave={() => handleCursorHover(false)}
-                        className="w-full rounded-xl bg-slate-900 py-4 font-black tracking-wide text-white transition-all duration-300 hover:bg-indigo-600 hover:shadow-xl hover:shadow-indigo-200"
+                        className="w-full rounded-xl bg-indigo-600 py-4 font-black tracking-wide text-white transition-all duration-300 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/25"
                     >
                         Send Message →
                     </button>

@@ -27,6 +27,7 @@ interface ProjectsSectionProps {
     bgCard: string;
     textPrimary: string;
     textMuted: string;
+    darkMode?: boolean;
 }
 
 export default function ProjectsSection({
@@ -35,9 +36,11 @@ export default function ProjectsSection({
                                             bgCard,
                                             textPrimary,
                                             textMuted,
+                                            darkMode = false,
                                         }: ProjectsSectionProps) {
     const scrollRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-    const [expandedProject, setExpandedProject] = useState<number | null>(null);
+                                            const projectsScrollerRef = useRef<HTMLDivElement>(null);
+                                            const [expandedProject, setExpandedProject] = useState<number | null>(null);
 
     const setScrollRef = useCallback((el: HTMLDivElement | null) => {
         if (!el) {
@@ -59,7 +62,7 @@ export default function ProjectsSection({
                 return;
             }
 
-            const scrollAmount = container.clientWidth * 0.9;
+            const scrollAmount = container.clientWidth;
             const currentScroll = container.scrollLeft;
             const maxScroll = container.scrollWidth - container.clientWidth;
 
@@ -82,7 +85,7 @@ export default function ProjectsSection({
         }
 
         container.scrollTo({
-            left: index * (container.clientWidth * 0.9),
+            left: index * container.clientWidth,
             behavior: 'smooth',
         });
     }, []);
@@ -91,171 +94,244 @@ export default function ProjectsSection({
         setExpandedProject((prev) => (prev === id ? null : id));
     }, []);
 
+    const scrollProjects = (direction: 'left' | 'right') => {
+        const container = projectsScrollerRef.current;
+
+        if (!container) {
+            return;
+        }
+
+        container.scrollBy({
+            left:
+                direction === 'left'
+                    ? -container.clientWidth
+                    : container.clientWidth,
+            behavior: 'smooth',
+        });
+    };
+
     const isExpanded = (id: number) => expandedProject === id;
 
+    const arrowButtonClass = `absolute top-1/2 z-30 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full border backdrop-blur-sm transition-colors ${
+        darkMode
+            ? 'border-white/20 bg-black/45 text-white hover:bg-black/70'
+            : 'border-white/80 bg-white/90 text-slate-800 shadow-sm hover:bg-white'
+    }`;
+
     return (
-        <section id="projects" className={`px-4 py-16 lg:px-8 ${bg}`}>
+        <section id="projects" className={`px-6 py-24 lg:px-8 ${bg}`}>
             <div className="mx-auto max-w-7xl">
-                {/* Header */}
-                <div className="mb-12 flex flex-col items-start gap-3 lg:flex-row lg:items-end lg:gap-0">
+                <div className="fade-up mb-16 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
-                        <span className="inline-block bg-linear-to-r from-indigo-500 to-purple-600 bg-clip-text text-[11px] font-bold tracking-[0.3em] text-transparent uppercase">
+                        <span className="text-xs font-bold tracking-[0.2em] text-indigo-600 uppercase">
                             Featured Work
                         </span>
                         <h2
-                            className={`mt-1 text-3xl font-black sm:text-4xl ${textPrimary}`}
+                            className={`mt-3 text-4xl font-black sm:text-5xl ${textPrimary}`}
                         >
                             Recent{' '}
-                            <span className="bg-linear-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                                Projects
-                            </span>
+                            <span className="text-indigo-600">Projects</span>
                         </h2>
                     </div>
 
-                    <Link
-                        href="/projects"
-                        className="group flex items-center gap-2 text-xs font-bold text-indigo-600 hover:text-indigo-700"
-                    >
-                        View all
-                        <ArrowUpRight
-                            size={14}
-                            className="transition-transform group-hover:translate-x-1"
-                        />
-                    </Link>
+                    <div className="flex items-center gap-3">
+                        <div className="flex gap-2">
+                            <button
+                                type="button"
+                                aria-label="Scroll projects left"
+                                onClick={() => scrollProjects('left')}
+                                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+                                    darkMode
+                                        ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
+                                        : 'border-slate-200 text-slate-700 hover:bg-white'
+                                }`}
+                            >
+                                <ChevronLeft size={18} />
+                            </button>
+                            <button
+                                type="button"
+                                aria-label="Scroll projects right"
+                                onClick={() => scrollProjects('right')}
+                                className={`flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+                                    darkMode
+                                        ? 'border-slate-700 text-slate-200 hover:bg-slate-800'
+                                        : 'border-slate-200 text-slate-700 hover:bg-white'
+                                }`}
+                            >
+                                <ChevronRight size={18} />
+                            </button>
+                        </div>
+                        <Link
+                            href="/projects"
+                            className="group flex items-center gap-1 text-sm font-bold text-indigo-600 hover:text-indigo-700"
+                        >
+                            View all
+                            <ArrowUpRight
+                                size={16}
+                                className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            />
+                        </Link>
+                    </div>
                 </div>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    {projects.map((project, index) => (
-                        <div
-                            key={project.id}
-                            className={`fade-up group relative overflow-hidden rounded-xl ${bgCard} border border-white/10 bg-linear-to-br from-white/80 to-white/50 shadow-lg backdrop-blur-sm transition-all duration-500 hover:-translate-y-2 hover:scale-[1.01] hover:shadow-xl`}
-                            style={{ animationDelay: `${index * 120}ms` }}
-                        >
-                            {/* Image */}
-                            <div className="relative h-44 overflow-hidden">
-                                <div
-                                    data-project-id={project.id}
-                                    ref={setScrollRef}
-                                    className="scrollbar-hide absolute inset-0 flex snap-x snap-mandatory overflow-x-auto"
-                                >
-                                    {project.images.map((src, i) => (
-                                        <div
-                                            key={i}
-                                            className="flex h-full w-[95%] shrink-0 snap-center items-center justify-center px-2"
-                                        >
+                <div
+                    ref={projectsScrollerRef}
+                    className="scrollbar-hide grid snap-x snap-mandatory auto-cols-[85%] grid-flow-col grid-rows-1 items-stretch gap-6 overflow-x-auto pb-4 sm:auto-cols-[45%] lg:auto-cols-[calc(25%-1.125rem)]"
+                >
+                    {projects.map((project) => {
+                        const tech = Array.isArray(project.tech)
+                            ? project.tech
+                            : [];
+
+                        return (
+                            <div
+                                key={project.id}
+                                className={`fade-up group flex h-full snap-start flex-col overflow-hidden rounded-3xl border shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${bgCard} ${
+                                    darkMode
+                                        ? 'border-slate-700/80'
+                                        : 'border-slate-200/80'
+                                }`}
+                            >
+                                <div className="relative h-48 shrink-0 overflow-hidden">
+                                    <div
+                                        data-project-id={project.id}
+                                        ref={setScrollRef}
+                                        className="scrollbar-hide absolute inset-0 flex snap-x snap-mandatory overflow-x-auto"
+                                    >
+                                        {project.images.map((src, i) => (
                                             <img
-                                                src={src}
-                                                className="h-full w-full rounded-lg object-cover"
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* Nav */}
-                                <button
-                                    onClick={() =>
-                                        scrollProject(project.id, 'left')
-                                    }
-                                    className="absolute top-1/2 left-2 z-30 -translate-y-1/2"
-                                >
-                                    <ChevronLeft />
-                                </button>
-
-                                <button
-                                    onClick={() =>
-                                        scrollProject(project.id, 'right')
-                                    }
-                                    className="absolute top-1/2 right-2 z-30 -translate-y-1/2"
-                                >
-                                    <ChevronRight />
-                                </button>
-
-                                {/* Dots */}
-                                {project.images.length > 1 && (
-                                    <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1">
-                                        {project.images.map((_, i) => (
-                                            <button
                                                 key={i}
-                                                onClick={() =>
-                                                    scrollToImage(project.id, i)
-                                                }
-                                                className="h-2 w-2 rounded-full bg-white/60"
+                                                src={src}
+                                                alt=""
+                                                className="h-full w-full shrink-0 snap-center object-cover"
                                             />
                                         ))}
                                     </div>
-                                )}
-                            </div>
 
-                            {/* Content */}
-                            <div className="p-4">
-                                <div className="flex items-start justify-between gap-2">
-                                    <h3
-                                        className={`text-lg font-bold ${textPrimary}`}
+                                    {project.images.length > 1 && (
+                                        <>
+                                            <button
+                                                type="button"
+                                                aria-label={`Previous image for ${project.title}`}
+                                                onClick={() =>
+                                                    scrollProject(
+                                                        project.id,
+                                                        'left',
+                                                    )
+                                                }
+                                                className={`${arrowButtonClass} left-3`}
+                                            >
+                                                <ChevronLeft size={16} />
+                                            </button>
+                                            <button
+                                                type="button"
+                                                aria-label={`Next image for ${project.title}`}
+                                                onClick={() =>
+                                                    scrollProject(
+                                                        project.id,
+                                                        'right',
+                                                    )
+                                                }
+                                                className={`${arrowButtonClass} right-3`}
+                                            >
+                                                <ChevronRight size={16} />
+                                            </button>
+                                            <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+                                                {project.images.map((_, i) => (
+                                                    <button
+                                                        key={i}
+                                                        type="button"
+                                                        aria-label={`Show image ${i + 1}`}
+                                                        onClick={() =>
+                                                            scrollToImage(
+                                                                project.id,
+                                                                i,
+                                                            )
+                                                        }
+                                                        className="h-1.5 w-1.5 rounded-full bg-white/80"
+                                                    />
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+                                <div className="flex flex-1 flex-col p-5">
+                                    <div className="mb-2 flex items-start justify-between gap-3">
+                                        <h3
+                                            className={`text-lg font-black ${textPrimary}`}
+                                        >
+                                            {project.title}
+                                        </h3>
+                                        <Link
+                                            href={project.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            title="View Project"
+                                            aria-label={`View ${project.title} project`}
+                                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition-colors hover:bg-indigo-500"
+                                        >
+                                            <ExternalLink size={14} />
+                                        </Link>
+                                    </div>
+
+                                    <p
+                                        className={`text-sm leading-relaxed ${textMuted} ${
+                                            isExpanded(project.id)
+                                                ? ''
+                                                : 'line-clamp-3'
+                                        }`}
                                     >
-                                        {project.title}
-                                    </h3>
+                                        {isExpanded(project.id)
+                                            ? project.full_description
+                                            : project.short_description}
+                                    </p>
 
-<Link
-                                    href={project.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    title="View Project"
-                                    aria-label={`View ${project.title} project`}
-                                    className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-white transition-colors hover:bg-indigo-700"
+                                    {tech.length > 0 && (
+                                        <div className="mt-4 flex flex-wrap gap-1.5">
+                                            {tech.slice(0, 4).map((item) => (
+                                                <span
+                                                    key={item}
+                                                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                                                        darkMode
+                                                            ? 'bg-slate-700 text-slate-200'
+                                                            : 'bg-slate-100 text-slate-700'
+                                                    }`}
+                                                >
+                                                    {item}
+                                                </span>
+                                            ))}
+                                            {tech.length > 4 && (
+                                                <span
+                                                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                                                        darkMode
+                                                            ? 'bg-slate-700 text-slate-200'
+                                                            : 'bg-slate-100 text-slate-700'
+                                                    }`}
+                                                >
+                                                    +{tech.length - 4}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            toggleExpanded(project.id)
+                                        }
+                                        className="mt-auto pt-4 text-left text-xs font-bold text-indigo-600"
                                     >
-                                    <ExternalLink size={12} />
-                                </Link>
+                                        {isExpanded(project.id)
+                                            ? 'Read less'
+                                            : 'Read more'}
+                                    </button>
+                                </div>
                             </div>
-
-                            <p
-                                className={`${textMuted} text-sm ${
-                                    isExpanded(project.id)
-                                        ? ''
-                                        : 'line-clamp-2'
-                                }`}
-                            >
-                                {isExpanded(project.id)
-                                    ? project.full_description
-                                    : project.short_description}
-                            </p>
-
-                            <button
-                                onClick={() => toggleExpanded(project.id)}
-                                className="text-xs text-indigo-600"
-                            >
-                                {isExpanded(project.id)
-                                    ? 'Read less'
-                                    : 'Read more'}
-                            </button>
-                        </div>
-                        </div>
-                        ))}
+                        );
+                    })}
                 </div>
             </div>
-
-            {/* Styles */}
-            <style>{`
-                .scrollbar-hide::-webkit-scrollbar { display: none; }
-                .scrollbar-hide { scrollbar-width: none; }
-
-                .fade-up {
-                    opacity: 0;
-                    transform: translateY(30px);
-                    animation: fadeUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-                }
-
-                @keyframes fadeUp {
-                    to { opacity: 1; transform: translateY(0); }
-                }
-
-                .line-clamp-2 {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
-            `}</style>
         </section>
     );
 }

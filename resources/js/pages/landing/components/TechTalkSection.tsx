@@ -141,7 +141,11 @@ export default function TechTalkSection({
                                 href={`/tech-talk-details/${talk.slug}`}
                                 onMouseEnter={() => handleCursorHover(true)}
                                 onMouseLeave={() => handleCursorHover(false)}
-                                className={`fade-up group ${bg} snap-start rounded-3xl border p-8 ${borderColor} flex flex-col transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-lg`}
+                                className={`fade-up group ${bg} flex h-full snap-start flex-col rounded-3xl border p-8 ${borderColor} transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
+                                    dm
+                                        ? 'hover:border-indigo-500/40'
+                                        : 'hover:border-indigo-200'
+                                }`}
                                 style={{ animationDelay: `${i * 60}ms` }}
                             >
                                 <div className="mb-6 flex items-start justify-between">

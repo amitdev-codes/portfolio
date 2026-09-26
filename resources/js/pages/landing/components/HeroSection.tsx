@@ -1,13 +1,12 @@
 import { Link } from '@inertiajs/react';
 import {
-    Mail,
-    Phone,
     ArrowUpRight,
-    MapPin,
-    Code2,
     Download,
     Github,
     Linkedin,
+    Mail,
+    MapPin,
+    Phone,
 } from 'lucide-react';
 
 interface HeroStat {
@@ -47,18 +46,30 @@ interface HeroSectionProps {
     handleCursorHover: (on: boolean) => void;
 }
 
+const HERO_BG =
+    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=2000&q=80';
+
+const FALLBACK_SKILLS = [
+    'Laravel',
+    'React',
+    'PHP',
+    'TypeScript',
+    'MySQL',
+    'Redis',
+    'Vue.js',
+    'Tailwind',
+    'Docker',
+    'Inertia.js',
+];
+
 export default function HeroSection({
-                                        hero,
-                                        darkMode,
-                                        textPrimary,
-                                        textMuted,
-                                        bgCard,
-                                        borderColor,
-                                        handleCursorHover,
-                                    }: HeroSectionProps) {
+    hero,
+    darkMode,
+    handleCursorHover,
+}: HeroSectionProps) {
     if (!hero) {
         return null;
-    } // guard #1 — bail out safely if hero itself is missing
+    }
 
     const dm = darkMode;
     const {
@@ -69,11 +80,15 @@ export default function HeroSection({
         tech_stack,
         is_available,
         availability_text,
-        stats = [],       // guard #2 — default stats
+        stats = [],
         skills = [],
         profile_image,
-        links = {},        // guard #3 — default links to empty object
+        links = {},
     } = hero;
+
+    const displayName = [name.first, name.middle, name.last]
+        .filter(Boolean)
+        .join(' ');
 
     const socialLinks = [
         { icon: Github, label: 'GitHub', href: links?.github },
@@ -89,6 +104,18 @@ export default function HeroSection({
         s.label.toLowerCase().includes('year'),
     )?.value;
 
+    const marqueeSkills =
+        skills.length > 0
+            ? skills
+            : tech_stack
+              ? String(tech_stack)
+                    .split(/[·,+/|]/)
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+              : FALLBACK_SKILLS;
+
+    const marqueeItems = [...marqueeSkills, ...marqueeSkills, ...marqueeSkills];
+
     const cvLabel = links.cv_type
         ? `Download CV (.${links.cv_type})`
         : 'Download CV';
@@ -96,115 +123,106 @@ export default function HeroSection({
     return (
         <section
             id="home"
-            className="relative flex min-h-screen items-center overflow-hidden px-6 pt-24 pb-16 lg:px-8"
+            className={`relative flex min-h-screen flex-col overflow-hidden transition-colors duration-500 ${
+                dm ? 'hero-theme-dark' : 'hero-theme-light'
+            }`}
         >
-            {/* Subtle background orbs */}
-            <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                <div
-                    className={`absolute -top-32 -right-32 h-125 w-125 rounded-full ${dm ? 'bg-indigo-900/20' : 'bg-indigo-100/60'} blur-3xl`}
+            <div className="absolute inset-0">
+                <img
+                    src={HERO_BG}
+                    alt=""
+                    className={`h-full w-full object-cover ${
+                        dm ? '' : 'hero-photo-light'
+                    }`}
                 />
-                <div
-                    className={`absolute -bottom-32 -left-32 h-100 w-100 rounded-full ${dm ? 'bg-pink-900/10' : 'bg-pink-100/40'} blur-3xl`}
-                />
+                {dm ? (
+                    <>
+                        <div className="absolute inset-0 bg-[#0f0f13]/88" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0c1222]/95 via-[#0c1222]/72 to-[#0c1222]/40" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0c1222]/92 via-transparent to-[#0c1222]/35" />
+                    </>
+                ) : (
+                    <div className="hero-scrim-light absolute inset-0" />
+                )}
             </div>
 
-            <div className="relative mx-auto w-full max-w-7xl">
-                <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_auto]">
-                    {/* ── Left: Text content ── */}
-                    <div className="fade-up max-w-2xl">
-                        {/* Eyebrow */}
-                        <div className="mb-6 flex items-center gap-3">
-                            <span className="h-px w-8 bg-indigo-600" />
-                            <span className="text-xs font-bold tracking-[0.2em] text-indigo-600 uppercase">
-                                {role_title || 'Full Stack Developer'}
-                            </span>
+            <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-center px-6 pt-24 pb-10 lg:px-8">
+                <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-12">
+                    <div className="hero-enter-1 max-w-xl">
+                        <div className="mb-5 flex flex-wrap items-center gap-3">
+                            {is_available && (
+                                <span
+                                    className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold ${
+                                        dm
+                                            ? 'border-emerald-400/30 bg-emerald-500/15 text-emerald-300'
+                                            : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                                    }`}
+                                >
+                                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+                                    {availability_text || 'Available for work'}
+                                </span>
+                            )}
+                            {location && (
+                                <span
+                                    className={`inline-flex items-center gap-1.5 text-xs font-medium ${
+                                        dm ? 'text-white/65' : 'text-slate-500'
+                                    }`}
+                                >
+                                    <MapPin
+                                        size={12}
+                                        className={dm ? 'text-indigo-300' : 'text-indigo-600'}
+                                    />
+                                    {location}
+                                </span>
+                            )}
                         </div>
 
-                        {/* Name */}
+                        <p
+                            className={`mb-3 text-sm font-semibold tracking-[0.18em] uppercase ${
+                                dm ? 'text-indigo-300' : 'text-indigo-600'
+                            }`}
+                        >
+                            {role_title || 'Full Stack Developer'}
+                        </p>
+
                         <h1
-                            className={`mb-6 text-5xl leading-[0.95] font-black tracking-tight lg:text-6xl xl:text-7xl ${textPrimary}`}
+                            className={`mb-5 text-5xl leading-[0.95] font-black tracking-tight sm:text-6xl lg:text-7xl ${
+                                dm ? 'text-white' : 'text-slate-900'
+                            }`}
                         >
                             {name.first}
-                            <br />
-                            <span className="text-indigo-600">
-                                {name.middle || name.last}
-                            </span>
-                            {name.middle && name.last && (
+                            {(name.middle || name.last) && (
                                 <>
                                     <br />
                                     <span
                                         className={
-                                            dm
-                                                ? 'text-slate-600'
-                                                : 'text-slate-300'
+                                            dm ? 'text-indigo-300' : 'text-indigo-600'
                                         }
                                     >
-                                        {name.last}
+                                        {[name.middle, name.last]
+                                            .filter(Boolean)
+                                            .join(' ')}
                                     </span>
                                 </>
                             )}
                         </h1>
 
-                        {/* Tagline */}
                         <p
-                            className={`text-base ${textMuted} mb-8 max-w-md leading-relaxed font-light`}
+                            className={`mb-8 max-w-lg text-base leading-relaxed sm:text-lg ${
+                                dm
+                                    ? 'text-white/75'
+                                    : 'font-medium text-slate-950'
+                            }`}
                         >
                             {tagline}
                         </p>
 
-                        {/* Badges */}
-                        <div className="mb-6 flex flex-wrap gap-2">
-                            {location && (
-                                <span
-                                    className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
-                                >
-                                    <MapPin
-                                        size={12}
-                                        className="text-indigo-500"
-                                    />{' '}
-                                    {location}
-                                </span>
-                            )}
-                            {tech_stack && (
-                                <span
-                                    className={`flex items-center gap-2 text-xs ${textMuted} ${bgCard} border ${borderColor} rounded-full px-3 py-1.5`}
-                                >
-                                    <Code2
-                                        size={12}
-                                        className="text-indigo-500"
-                                    />{' '}
-                                    {tech_stack}
-                                </span>
-                            )}
-                            {is_available && (
-                                <span className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-600">
-                                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-                                    {availability_text}
-                                </span>
-                            )}
-                        </div>
-
-                        {/* Skills tag row — fills left-side space, shown only if provided */}
-                        {skills.length > 0 && (
-                            <div className="mb-8 flex flex-wrap gap-1.5">
-                                {skills.map((skill) => (
-                                    <span
-                                        key={skill}
-                                        className={`text-[11px] font-medium ${textMuted} rounded-md border ${borderColor} px-2 py-1`}
-                                    >
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-
-                        {/* CTAs */}
                         <div className="mb-8 flex flex-wrap gap-3">
                             <Link
                                 href="#contact"
                                 onMouseEnter={() => handleCursorHover(true)}
                                 onMouseLeave={() => handleCursorHover(false)}
-                                className="flex items-center gap-2 rounded-full bg-indigo-600 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-200"
+                                className="inline-flex items-center gap-2 rounded-full bg-indigo-600 px-7 py-3.5 text-sm font-bold text-white transition-all hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/25"
                             >
                                 Let's Talk <ArrowUpRight size={16} />
                             </Link>
@@ -212,7 +230,11 @@ export default function HeroSection({
                                 href="#projects"
                                 onMouseEnter={() => handleCursorHover(true)}
                                 onMouseLeave={() => handleCursorHover(false)}
-                                className={`${bgCard} border-2 ${dm ? 'border-slate-700 text-slate-200' : 'border-slate-200 text-slate-700'} rounded-full px-7 py-3.5 text-sm font-bold transition-all hover:border-indigo-400`}
+                                className={`inline-flex items-center gap-2 rounded-full border px-7 py-3.5 text-sm font-bold backdrop-blur-sm transition-all ${
+                                    dm
+                                        ? 'border-white/25 bg-white/5 text-white hover:border-white/50 hover:bg-white/10'
+                                        : 'border-slate-300 bg-white/70 text-slate-800 hover:border-indigo-400 hover:bg-white'
+                                }`}
                             >
                                 View Work
                             </Link>
@@ -223,30 +245,68 @@ export default function HeroSection({
                                     rel="noreferrer"
                                     download
                                     onMouseEnter={() => handleCursorHover(true)}
-                                    onMouseLeave={() =>
-                                        handleCursorHover(false)
-                                    }
-                                    className={`flex items-center gap-2 rounded-full border-2 border-dashed ${dm ? 'border-indigo-700 text-indigo-300' : 'border-indigo-300 text-indigo-600'} px-7 py-3.5 text-sm font-bold transition-all hover:border-indigo-500`}
+                                    onMouseLeave={() => handleCursorHover(false)}
+                                    className={`inline-flex items-center gap-2 rounded-full border border-dashed px-6 py-3.5 text-sm font-bold transition-all ${
+                                        dm
+                                            ? 'border-indigo-300/50 text-indigo-200 hover:border-indigo-300 hover:text-white'
+                                            : 'border-indigo-300 text-indigo-600 hover:border-indigo-500'
+                                    }`}
                                 >
                                     <Download size={16} /> {cvLabel}
                                 </a>
                             )}
                         </div>
 
-                        {/* Social Icons */}
+                        {stats.length > 0 && (
+                            <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                {stats.map((s) => (
+                                    <div
+                                        key={s.label}
+                                        className={`rounded-xl border px-3 py-3 backdrop-blur-sm ${
+                                            dm
+                                                ? 'border-white/10 bg-white/5'
+                                                : 'border-slate-200/80 bg-white/80 shadow-sm'
+                                        }`}
+                                    >
+                                        <p
+                                            className={`text-xl font-black ${
+                                                dm ? 'text-white' : 'text-slate-900'
+                                            }`}
+                                        >
+                                            {s.value}
+                                        </p>
+                                        <p
+                                            className={`mt-0.5 text-[11px] font-medium ${
+                                                dm ? 'text-white/55' : 'text-slate-500'
+                                            }`}
+                                        >
+                                            {s.label}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
                         <div className="flex gap-2">
                             {socialLinks
-                                .filter((link): link is typeof link & { href: string } => !!link.href)
+                                .filter(
+                                    (link): link is typeof link & { href: string } =>
+                                        !!link.href,
+                                )
                                 .map(({ icon: Icon, label, href }) => (
                                     <Link
                                         key={label}
-                                        href={href}           // Now guaranteed to be string
+                                        href={href}
                                         target={label !== 'Email' ? '_blank' : undefined}
                                         rel="noreferrer"
+                                        title={label}
                                         onMouseEnter={() => handleCursorHover(true)}
                                         onMouseLeave={() => handleCursorHover(false)}
-                                        title={label}
-                                        className={`h-9 w-9 rounded-full ${bgCard} border ${borderColor} ${textMuted} flex items-center justify-center shadow-sm transition-all hover:border-indigo-600 hover:bg-indigo-600 hover:text-white`}
+                                        className={`flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:border-indigo-500 hover:bg-indigo-600 hover:text-white ${
+                                            dm
+                                                ? 'border-white/15 bg-white/5 text-white/70'
+                                                : 'border-slate-200 bg-white text-slate-600 shadow-sm'
+                                        }`}
                                     >
                                         <Icon size={15} />
                                     </Link>
@@ -254,117 +314,145 @@ export default function HeroSection({
                         </div>
                     </div>
 
-                    {/* ── Right: Compact Profile Card ── */}
-                    <div className="fade-up flex flex-col items-center gap-5 lg:items-end">
-                        {/* Profile image — compact circle with ring */}
-                        <div className="relative">
-                            {/* Rotating ring accent */}
-                            <div className="absolute inset-0 animate-[spin_18s_linear_infinite] rounded-full border-2 border-dashed border-indigo-300" />
-                            {/* Solid inner ring */}
-                            <div className="absolute inset-2 rounded-full border border-indigo-500/30" />
-
-                            {/* Avatar container */}
+                    <div className="hero-enter-2 flex justify-center lg:justify-end">
+                        <div className="relative w-full max-w-sm">
                             <div
-                                className={`relative z-10 m-3 h-44 w-44 overflow-hidden rounded-full ring-4 ${dm ? 'ring-indigo-800/60' : 'ring-indigo-100'} shadow-2xl`}
-                            >
-                                <img
-                                    src={
-                                        profile_image ||
-                                        '/images/profileimage.png'
-                                    }
-                                    alt={`${name.first} ${name.last || ''}`}
-                                    className="h-full w-full object-cover object-top"
-                                />
-                            </div>
+                                className={`absolute -inset-3 rounded-[2rem] blur-2xl ${
+                                    dm
+                                        ? 'bg-gradient-to-br from-indigo-500/30 via-transparent to-fuchsia-500/20'
+                                        : 'bg-gradient-to-br from-indigo-500/45 via-sky-300/25 to-fuchsia-400/35'
+                                }`}
+                            />
 
-                            {/* Experience badge */}
-                            {yearsExp && (
-                                <div className="absolute -top-1 -right-1 z-20 flex h-12 w-12 flex-col items-center justify-center rounded-full bg-indigo-600 text-white shadow-lg shadow-indigo-300/40">
-                                    <span className="text-sm leading-none font-black">
-                                        {yearsExp}
-                                    </span>
-                                    <span className="text-[9px] font-semibold opacity-80">
-                                        yrs
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Stat pills */}
-                        <div className="grid grid-cols-2 gap-2">
-                            {stats.map((s) => (
-                                <div
-                                    key={s.label}
-                                    className={`${bgCard} border ${borderColor} rounded-xl px-4 py-3 text-center shadow-sm transition-all hover:border-indigo-300 hover:shadow-md`}
-                                >
-                                    <p className="text-xl leading-none font-black text-indigo-600">
-                                        {s.value}
-                                    </p>
-                                    <p
-                                        className={`mt-0.5 text-[11px] ${textMuted} font-medium`}
-                                    >
-                                        {s.label}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Quick Contact card — fills right-side space */}
-                        {(links.email || links.phone) && (
                             <div
-                                className={`${bgCard} border ${borderColor} w-full max-w-55 rounded-xl px-4 py-3 shadow-sm`}
+                                className={`relative overflow-hidden rounded-[1.75rem] border shadow-2xl backdrop-blur-md ${
+                                    dm
+                                        ? 'border-white/15 bg-white/5 shadow-black/40'
+                                        : 'border-slate-200/90 bg-white/90 shadow-slate-300/40'
+                                }`}
                             >
-                                <p
-                                    className={`mb-2 text-[10px] font-bold tracking-widest uppercase ${textMuted}`}
-                                >
-                                    Quick Contact
-                                </p>
-                                <div className="space-y-1.5">
-                                    {links.email && (
-                                        <a
-                                            href={`mailto:${links.email}`}
-                                            className={`flex items-center gap-2 text-xs ${textPrimary} truncate transition-colors hover:text-indigo-600`}
-                                        >
-                                            <Mail
-                                                size={12}
-                                                className="shrink-0 text-indigo-500"
-                                            />
-                                            <span className="truncate">
-                                                {links.email}
+                                <div className="relative aspect-[4/5] overflow-hidden">
+                                    <img
+                                        src={
+                                            profile_image ||
+                                            '/images/profileimage.png'
+                                        }
+                                        alt={displayName}
+                                        className="h-full w-full object-cover object-top"
+                                    />
+                                    <div
+                                        className={`absolute inset-0 bg-gradient-to-t via-transparent to-transparent ${
+                                            dm
+                                                ? 'from-[#0c1222]/90'
+                                                : 'from-slate-900/75'
+                                        }`}
+                                    />
+
+                                    {yearsExp && (
+                                        <div className="absolute top-4 right-4 flex h-14 w-14 flex-col items-center justify-center rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-900/30">
+                                            <span className="text-lg leading-none font-black">
+                                                {yearsExp}
                                             </span>
-                                        </a>
+                                            <span className="text-[10px] font-semibold opacity-85">
+                                                yrs
+                                            </span>
+                                        </div>
                                     )}
-                                    {links.phone && (
-                                        <a
-                                            href={`tel:${links.phone}`}
-                                            className={`flex items-center gap-2 text-xs ${textPrimary} transition-colors hover:text-indigo-600`}
-                                        >
-                                            <Phone
-                                                size={12}
-                                                className="shrink-0 text-indigo-500"
-                                            />
-                                            {links.phone}
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
 
-                {/* Scroll indicator */}
-                <div className="mt-16 flex flex-col items-center gap-2">
-                    <span
-                        className={`text-[11px] tracking-widest uppercase ${textMuted} font-medium`}
-                    >
-                        scroll
-                    </span>
-                    <div
-                        className={`relative h-10 w-5 rounded-full border ${dm ? 'border-slate-700' : 'border-slate-300'}`}
-                    >
-                        <span className="absolute top-1.5 left-1/2 h-1.5 w-1.5 -translate-x-1/2 animate-[scrollDot_1.8s_ease-in-out_infinite] rounded-full bg-indigo-500" />
+                                    <div className="absolute right-0 bottom-0 left-0 p-5 text-white">
+                                        <p className="text-lg font-bold">
+                                            {displayName}
+                                        </p>
+                                        <p className="text-sm text-indigo-200">
+                                            {role_title || 'Full Stack Developer'}
+                                        </p>
+                                        {tech_stack && (
+                                            <p className="mt-1 text-xs text-white/70">
+                                                {tech_stack}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {(links.email || links.phone) && (
+                                    <div
+                                        className={`space-y-2 border-t px-5 py-4 ${
+                                            dm
+                                                ? 'border-white/10'
+                                                : 'border-slate-100'
+                                        }`}
+                                    >
+                                        {links.email && (
+                                            <a
+                                                href={`mailto:${links.email}`}
+                                                className={`flex items-center gap-2 truncate text-sm transition-colors hover:text-indigo-600 ${
+                                                    dm
+                                                        ? 'text-white/80 hover:text-white'
+                                                        : 'text-slate-700'
+                                                }`}
+                                            >
+                                                <Mail
+                                                    size={14}
+                                                    className="shrink-0 text-indigo-500"
+                                                />
+                                                <span className="truncate">
+                                                    {links.email}
+                                                </span>
+                                            </a>
+                                        )}
+                                        {links.phone && (
+                                            <a
+                                                href={`tel:${links.phone}`}
+                                                className={`flex items-center gap-2 text-sm transition-colors hover:text-indigo-600 ${
+                                                    dm
+                                                        ? 'text-white/80 hover:text-white'
+                                                        : 'text-slate-700'
+                                                }`}
+                                            >
+                                                <Phone
+                                                    size={14}
+                                                    className="shrink-0 text-indigo-500"
+                                                />
+                                                {links.phone}
+                                            </a>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <div
+                className={`relative z-10 border-t py-5 backdrop-blur-md ${
+                    dm
+                        ? 'border-white/10 bg-black/25'
+                        : 'border-slate-200/70 bg-white/55'
+                }`}
+            >
+                <div className="tech-marquee mx-auto max-w-5xl" aria-hidden="true">
+                    <div className="tech-marquee-track">
+                        {marqueeItems.map((skill, index) => (
+                            <span
+                                key={`${skill}-${index}`}
+                                className={`tech-marquee-item ${
+                                    dm ? 'tech-marquee-item-dark' : 'tech-marquee-item-light'
+                                }`}
+                            >
+                                {skill}
+                                <span
+                                    className={`mx-5 ${
+                                        dm ? 'text-indigo-400/80' : 'text-indigo-500/70'
+                                    }`}
+                                >
+                                    ✦
+                                </span>
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                <p className="sr-only">Tech stack: {marqueeSkills.join(', ')}</p>
             </div>
         </section>
     );

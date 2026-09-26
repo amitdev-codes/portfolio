@@ -7,13 +7,13 @@ use Illuminate\Database\Seeder;
 
 class StatSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         Stat::truncate();
 
         $stats = [
-            ['value' => '3+',  'label' => 'Years Experience'],
-            ['value' => '20+', 'label' => 'Projects Shipped'],
+            ['value' => '6+', 'label' => 'Years Experience'],
+            ['value' => '25+', 'label' => 'Projects Shipped'],
             ['value' => '15+', 'label' => 'Happy Clients'],
             ['value' => '99%', 'label' => 'Uptime Delivered'],
         ];
@@ -22,7 +22,7 @@ class StatSeeder extends Seeder
             Stat::create([
                 'value' => $item['value'],
                 'label' => $item['label'],
-                'icon' => null, // you can later add icons like 'lucide-code'
+                'icon' => null,
                 'sort_order' => $index + 1,
             ]);
         }

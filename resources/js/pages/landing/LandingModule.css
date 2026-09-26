@@ -5,13 +5,15 @@
    BACKGROUND SYSTEM — light & dark
    ══════════════════════════════════════════ */
 
-/* Light mode — warm off-white with dot grid + soft colour blobs */
+/* Light mode — warm off-white with dot grid + soft colour blobs.
+   Alphas are higher than dark mode on purpose: cream swallows tint that
+   still reads on charcoal. */
 .bg-\[\#f8f7f4\] {
   background-color: #f8f7f4;
   background-image:
-    radial-gradient(circle at 20% 10%, rgba(99, 102, 241, 0.06) 0%, transparent 45%),
-    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 40%),
-    radial-gradient(#d1cfc9 1px, transparent 1px);
+    radial-gradient(circle at 20% 10%, rgba(99, 102, 241, 0.16) 0%, transparent 46%),
+    radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.12) 0%, transparent 42%),
+    radial-gradient(#bdbab2 1.1px, transparent 1.1px);
   background-size: 100% 100%, 100% 100%, 28px 28px;
 }
 
@@ -40,6 +42,38 @@
 /* Dark card */
 .bg-\[\#1e1e28\] {
   background-color: #1e1e28;
+}
+
+/* Hero photo. Dark mode already reads through its scrim.
+   Light mode multiplies the photo onto the cream so it stays visible
+   instead of being flattened by a white wash. */
+.hero-theme-light {
+  background-color: #f8f7f4;
+}
+
+.hero-photo-light {
+  opacity: 0.88;
+  filter: contrast(1.08) saturate(0.9);
+}
+
+.hero-scrim-light {
+  background:
+    linear-gradient(
+      to right,
+      #f8f7f4 0%,
+      rgba(248, 247, 244, 0.97) 30%,
+      rgba(248, 247, 244, 0.88) 42%,
+      rgba(248, 247, 244, 0.5) 56%,
+      rgba(248, 247, 244, 0.08) 72%,
+      transparent 82%
+    ),
+    linear-gradient(
+      to top,
+      rgba(248, 247, 244, 0.45) 0%,
+      rgba(248, 247, 244, 0.08) 28%,
+      transparent 58%,
+      rgba(248, 247, 244, 0.12) 100%
+    );
 }
 
 /* ══════════════════════════════════════════
@@ -173,3 +207,63 @@
   100% { box-shadow: 0 0 0 0   rgba(16, 185, 129, 0);   }
 }
 .pulse-ring { animation: pulseRing 2s ease-out infinite; }
+
+/* ══════════════════════════════════════════
+   HERO TECH MARQUEE (left → right, center focus)
+   ══════════════════════════════════════════ */
+.tech-marquee {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 18%,
+    black 82%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 18%,
+    black 82%,
+    transparent 100%
+  );
+}
+
+.tech-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: techMarquee 16s linear infinite;
+  will-change: transform;
+}
+
+.tech-marquee-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding-inline: 0.15rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tech-marquee-item-dark {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.tech-marquee-item-light {
+  color: rgba(30, 41, 59, 0.78);
+}
+
+@keyframes techMarquee {
+  from { transform: translateX(-33.333%); }
+  to   { transform: translateX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-marquee-track {
+    animation: none;
+  }
+}
