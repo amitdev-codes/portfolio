@@ -250,6 +250,10 @@ abstract class Factory
             return $this->state($attributes)->getExpandedAttributes($parent);
         }
 
+        if ($this->count < 1) {
+            return [];
+        }
+
         return array_map(function () use ($attributes, $parent) {
             return $this->state($attributes)->getExpandedAttributes($parent);
         }, range(1, $this->count));
@@ -494,6 +498,10 @@ abstract class Factory
             ? $made
             : $this->newModel()->newCollection([$made]);
 
+        if ($madeCollection->isEmpty()) {
+            return;
+        }
+
         $model = $madeCollection->first();
 
         if (isset($this->connection)) {
@@ -724,7 +732,7 @@ abstract class Factory
      */
     public function hasAttached($factory, $pivot = [], $relationship = null)
     {
-        if (is_array($pivot) && count($pivot) > 0 && array_all($pivot, fn ($p) => is_array($p))) {
+        if (is_array($pivot) && $pivot !== [] && array_is_list($pivot) && array_all($pivot, fn ($p) => is_array($p))) {
             $factory = $factory instanceof Factory && $factory->count === null
                 ? $factory->count(count($pivot))
                 : $factory;

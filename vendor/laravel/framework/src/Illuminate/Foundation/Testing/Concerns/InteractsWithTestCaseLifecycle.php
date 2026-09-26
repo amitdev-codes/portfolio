@@ -37,6 +37,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\EncodedHtmlString;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\Facades\ParallelTesting;
+use Illuminate\Support\Lottery;
 use Illuminate\Support\Once;
 use Illuminate\Support\Sleep;
 use Illuminate\Support\Str;
@@ -177,6 +178,18 @@ trait InteractsWithTestCaseLifecycle
             $this->originalDeprecationHandler = null;
         }
 
+        $this->flushState();
+
+        if ($this->callbackException) {
+            throw $this->callbackException;
+        }
+    }
+
+    /**
+     * Reset static state between test executions.
+     */
+    protected function flushState(): void
+    {
         AboutCommand::flushState();
         Artisan::forgetBootstrappers();
         Component::flushCache();
@@ -191,6 +204,7 @@ trait InteractsWithTestCaseLifecycle
         HandleExceptions::flushState($this);
         JsonApiResource::flushState();
         JsonResource::flushState();
+        Lottery::determineResultsNormally();
         Markdown::flushState();
         Migrator::withoutMigrations([]);
         Once::flush();
@@ -206,10 +220,6 @@ trait InteractsWithTestCaseLifecycle
         PreventRequestForgery::flushState();
         Validator::flushState();
         WorkCommand::flushState();
-
-        if ($this->callbackException) {
-            throw $this->callbackException;
-        }
     }
 
     /**

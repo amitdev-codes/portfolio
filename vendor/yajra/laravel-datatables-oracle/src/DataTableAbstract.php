@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Traits\Macroable;
+use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Contracts\Formatter;
@@ -101,6 +102,13 @@ abstract class DataTableAbstract implements DataTable
      * @var callable|null
      */
     protected $orderCallback = null;
+
+    /**
+     * Callback to run against each row before it gets processed.
+     *
+     * @var callable|null
+     */
+    protected $processCallback = null;
 
     /**
      * Skip pagination as needed.
@@ -461,6 +469,21 @@ abstract class DataTableAbstract implements DataTable
     public function order(callable $closure): static
     {
         $this->orderCallback = $closure;
+
+        return $this;
+    }
+
+    /**
+     * Process each row with the given callback before it gets converted to array.
+     *
+     * The row instance is passed to the callback so it can be mutated before
+     * being processed, e.g. setting a relation to avoid an n+1 query.
+     *
+     * @return $this
+     */
+    public function processWith(callable $callback): static
+    {
+        $this->processCallback = $callback;
 
         return $this;
     }
@@ -840,6 +863,10 @@ abstract class DataTableAbstract implements DataTable
             $this->request->start()
         );
 
+        if ($this->processCallback) {
+            $processor->processWith($this->processCallback);
+        }
+
         return $processor->process($object);
     }
 
@@ -968,6 +995,16 @@ abstract class DataTableAbstract implements DataTable
             return null;
         }
 
+        $validated = preg_replace('/\[.*?\]/', '', $column);
+
+        // Validate column name using an allowlist to prevent SQL injection.
+        // Only allow characters valid in unquoted SQL identifiers: alphanumeric, underscore, dot, dash, and space.
+        // Allows `>` for JSON path operators (e.g. column->path) handled by the query grammar.
+        // This is a defense-in-depth measure to prevent SQL injection via columns[N][data] or columns[N][name].
+        if (! preg_match('/^[\p{L}\p{N}_.\-> ]+$/u', (string) $validated)) {
+            throw new InvalidArgumentException("Invalid column name: \"$column\".");
+        }
+
         // DataTables is using make(false)
         if (is_numeric($column)) {
             $column = $this->getColumnNameByIndex($index);
@@ -1003,6 +1040,21 @@ abstract class DataTableAbstract implements DataTable
     public function minSearchLength(int $length): static
     {
         $this->minSearchLength = $length;
+
+        return $this;
+    }
+
+    /**
+     * Ignore the maximum length configured via datatables.max_length.
+     *
+     * Use it when all the records are needed no matter the configured
+     * maximum, e.g. when exporting every filtered record.
+     *
+     * @return $this
+     */
+    public function ignoreMaxLength(): static
+    {
+        $this->request->ignoreMaxLength();
 
         return $this;
     }

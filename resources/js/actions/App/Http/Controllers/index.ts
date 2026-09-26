@@ -1,5 +1,7 @@
 import HomeController from './HomeController'
+import SitemapController from './SitemapController'
 import Api from './Api'
+import DashboardController from './DashboardController'
 import UserManagement from './UserManagement'
 import ProductController from './ProductController'
 import ProjectController from './ProjectController'
@@ -13,7 +15,9 @@ import Settings from './Settings'
 
 const Controllers = {
     HomeController: Object.assign(HomeController, HomeController),
+    SitemapController: Object.assign(SitemapController, SitemapController),
     Api: Object.assign(Api, Api),
+    DashboardController: Object.assign(DashboardController, DashboardController),
     UserManagement: Object.assign(UserManagement, UserManagement),
     ProductController: Object.assign(ProductController, ProductController),
     ProjectController: Object.assign(ProjectController, ProjectController),

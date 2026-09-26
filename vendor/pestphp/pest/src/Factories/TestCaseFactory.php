@@ -94,7 +94,8 @@ final class TestCaseFactory
             $filename = (string) preg_replace_callback('~^(?P<drive>[a-z]+:\\\)~i', static fn (array $match): string => strtolower($match['drive']), $filename);
         }
 
-        $filename = str_replace('\\\\', '\\', addslashes((string) realpath($filename)));
+        $realpath = (string) realpath($filename);
+        $filename = str_replace('\\\\', '\\', addslashes($realpath));
         $rootPath = TestSuite::getInstance()->rootPath;
         $relativePath = str_replace($rootPath.DIRECTORY_SEPARATOR, '', $filename);
 
@@ -149,6 +150,8 @@ final class TestCaseFactory
 
         $attributesCode = Attributes::code($this->attributes);
 
+        $filenameLiteral = var_export($realpath, true);
+
         $methodsCode = implode('', array_map(
             fn (TestCaseMethodFactory $methodFactory): string => $methodFactory->buildForEvaluation(),
             $methods
@@ -158,6 +161,7 @@ final class TestCaseFactory
             $classCode = <<<PHP
             namespace $namespace;
 
+            use Pest\Exceptions\DatasetProviderError as __PestDatasetProviderError;
             use Pest\Repositories\DatasetsRepository as __PestDatasets;
             use Pest\TestSuite as __PestTestSuite;
 
@@ -166,7 +170,7 @@ final class TestCaseFactory
             final class $className extends $baseClass implements $hasPrintableTestCaseClassFQN {
                 $traitsCode
 
-                private static \$__filename = '$filename';
+                public static \$__filename = $filenameLiteral;
 
                 $methodsCode
             }

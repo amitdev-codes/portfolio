@@ -23,6 +23,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
     'is_published',
     'author_name',
     'slug',
+    'seo_title',
+    'seo_metatags',
 ])]
 class TechTalk extends Model implements HasMedia
 {

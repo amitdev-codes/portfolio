@@ -6,6 +6,7 @@ use App\Models\AboutInformation;
 use App\Models\PortfolioInformation;
 use App\Models\Project;
 use App\Models\TechTalk;
+use App\Models\VisitorAnalytics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -116,11 +117,33 @@ class HomeController extends Controller
                 ];
             });
 
+        // Prepare SEO data from portfolio
+        $seoTitle = $portfolio->seo_title ?: config('app.name', 'Amit Kumar Dev');
+        $seoDescription = $portfolio->seo_metatags ?: 'Amit Kumar - Full Stack Developer. Building scalable web applications with Laravel, React, and modern technologies.';
+        $seoImage = $portfolio->getFirstMediaUrl('cover_images') ?: asset('images/og-default.png');
+        $seoUrl = request()->fullUrl();
+        $techStack = $portfolio->tech_stack;
+        $seoKeywords = is_array($techStack) && ! empty($techStack)
+            ? implode(', ', $techStack)
+            : (is_string($techStack) && $techStack !== '' ? $techStack : 'Amit Kumar, Full Stack Developer, Laravel, React, PHP, JavaScript');
+
         return Inertia::render('landing/LandingPage', [
             'hero' => $hero,
             'projects' => $projects,
             'about' => $about,
             'techTalks' => $techTalks,
+            'seo' => [
+                'title' => $seoTitle,
+                'description' => $seoDescription,
+                'image' => $seoImage,
+                'url' => $seoUrl,
+                'type' => 'website',
+                'keywords' => $seoKeywords,
+                'twitter_card' => 'summary_large_image',
+                'robots' => 'index, follow',
+                'canonical' => $seoUrl,
+            ],
+            'totalVisits' => VisitorAnalytics::count(), // Add total visits count
         ]);
     }
 }

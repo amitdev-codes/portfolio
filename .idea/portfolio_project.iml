@@ -95,7 +95,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psy/psysh" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/collection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sebastian/cli-parser" />
@@ -157,6 +156,19 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables-buttons" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables-html" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/yajra/laravel-datatables-oracle" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/_laravel_idea" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/laravel/passkeys" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spomky-labs/cbor-php" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/spomky-labs/pki-framework" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php81" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php82" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php86" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/property-access" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/property-info" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/serializer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/type-info" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-auth/cose-lib" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/web-auth/webauthn-lib" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -7,10 +7,12 @@ use Illuminate\Foundation\Http\Kernel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Testing\TestResponse;
 use Illuminate\View\FileViewFinder;
+use Inertia\DevTools\DevTools;
+use Inertia\DevTools\DevToolsServiceProvider;
+use Inertia\DevTools\SourceLocator;
 use Inertia\Ssr\Gateway;
 use Inertia\Ssr\HttpGateway;
 use Inertia\Ssr\SsrState;
@@ -42,6 +44,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerRouterMacro();
         $this->registerTestingMacros();
         $this->registerMiddleware();
+        $this->app->register(DevToolsServiceProvider::class);
 
         $this->app->bind('inertia.view-finder', function ($app) {
             return new FileViewFinder(
@@ -58,7 +61,7 @@ class ServiceProvider extends BaseServiceProvider
     public function boot(): void
     {
         $this->registerConsoleCommands();
-        $this->pushRedirectMiddleware();
+        $this->registerRedirectMiddleware();
 
         $this->publishes([
             __DIR__.'/../config/inertia.php' => config_path('inertia.php'),
@@ -68,11 +71,12 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Register the global redirect middleware for Inertia requests.
      */
-    protected function pushRedirectMiddleware(): void
+    protected function registerRedirectMiddleware(): void
     {
         $this->callAfterResolving(HttpKernelContract::class, function ($kernel) {
             if ($kernel instanceof Kernel) {
                 $kernel->pushMiddleware(Middleware\EnsureGetOnRedirect::class);
+                $kernel->prependMiddleware(Middleware\EnsureDeferredCallbacksRun::class);
             }
         });
     }
@@ -82,8 +86,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     protected function registerBladeComponents(): void
     {
-        $this->callAfterResolving('blade.compiler', function () {
-            Blade::componentNamespace('Inertia\\View\\Components', 'inertia');
+        $this->callAfterResolving('blade.compiler', function ($blade) {
+            $blade->componentNamespace('Inertia\\View\\Components', 'inertia');
         });
     }
 
@@ -150,9 +154,19 @@ class ServiceProvider extends BaseServiceProvider
          * @param  array<array-key, mixed>  $props
          */
         Router::macro('inertia', function ($uri, $component, $props = []) {
-            return $this->match(['GET', 'HEAD'], $uri, '\\'.Controller::class)
+            $route = $this->match(['GET', 'HEAD'], $uri, '\\'.Controller::class)
                 ->defaults('component', $component)
                 ->defaults('props', $props);
+
+            if (DevTools::enabled()) {
+                $source = app(SourceLocator::class)->captureCallerSource();
+
+                if ($source !== null) {
+                    $route->defaults(DevTools::RENDER_SOURCE_KEY, $source);
+                }
+            }
+
+            return $route;
         });
     }
 

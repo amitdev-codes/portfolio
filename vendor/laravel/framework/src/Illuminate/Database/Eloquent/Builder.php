@@ -22,6 +22,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use ReflectionClass;
 use ReflectionMethod;
+use SortDirection;
 
 /**
  * @template TModel of \Illuminate\Database\Eloquent\Model
@@ -125,6 +126,7 @@ class Builder implements BuilderContract
         'insert',
         'insertgetid',
         'insertorignore',
+        'insertorignorereturning',
         'insertusing',
         'insertorignoreusing',
         'max',
@@ -212,7 +214,7 @@ class Builder implements BuilderContract
      */
     public function withoutGlobalScope($scope)
     {
-        if (! is_string($scope)) {
+        if (is_object($scope)) {
             $scope = get_class($scope);
         }
 
@@ -323,6 +325,28 @@ class Builder implements BuilderContract
         }
 
         return $this->where($this->model->getQualifiedKeyName(), '!=', $id);
+    }
+
+    /**
+     * Add an "or where" clause on the primary key to the query.
+     *
+     * @param  mixed  $id
+     * @return $this
+     */
+    public function orWhereKey($id)
+    {
+        return $this->where(fn (self $query) => $query->whereKey($id), null, null, 'or');
+    }
+
+    /**
+     * Add an "or where not" clause on the primary key to the query.
+     *
+     * @param  mixed  $id
+     * @return $this
+     */
+    public function orWhereKeyNot($id)
+    {
+        return $this->where(fn (self $query) => $query->whereKeyNot($id), null, null, 'or');
     }
 
     /**
@@ -964,10 +988,10 @@ class Builder implements BuilderContract
      */
     public function getRelation($name)
     {
-        // We want to run a relationship query without any constrains so that we will
+        // We want to do a relationship query without any constraints so that we will
         // not have to remove these where clauses manually which gets really hacky
         // and error prone. We don't want constraints because we add eager ones.
-        $relation = Relation::noConstraints(function () use ($name) {
+        $relation = Relation::noConstraintsForRelation(function () use ($name) {
             try {
                 return $this->getModel()->newInstance()->$name();
             } catch (BadMethodCallException) {
@@ -1071,7 +1095,7 @@ class Builder implements BuilderContract
     protected function enforceOrderBy()
     {
         if (empty($this->query->orders) && empty($this->query->unionOrders)) {
-            $this->orderBy($this->model->getQualifiedKeyName(), 'asc');
+            $this->orderBy($this->model->getQualifiedKeyName(), SortDirection::Ascending);
         }
     }
 
@@ -1107,6 +1131,16 @@ class Builder implements BuilderContract
     }
 
     /**
+     * Get an array of primary keys from the query result.
+     *
+     * @return array<int, array-key>
+     */
+    public function modelKeys()
+    {
+        return $this->pluck($this->model->getQualifiedKeyName())->all();
+    }
+
+    /**
      * Paginate the given query.
      *
      * @param  int|null|\Closure  $perPage
@@ -1114,7 +1148,7 @@ class Builder implements BuilderContract
      * @param  string  $pageName
      * @param  int|null  $page
      * @param  \Closure|int|null  $total
-     * @return \Illuminate\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Pagination\LengthAwarePaginator<int, TModel>
      *
      * @throws \InvalidArgumentException
      */
@@ -1143,7 +1177,7 @@ class Builder implements BuilderContract
      * @param  array|string  $columns
      * @param  string  $pageName
      * @param  int|null  $page
-     * @return \Illuminate\Contracts\Pagination\Paginator
+     * @return \Illuminate\Pagination\Paginator<int, TModel>
      */
     public function simplePaginate($perPage = null, $columns = ['*'], $pageName = 'page', $page = null)
     {
@@ -1169,7 +1203,7 @@ class Builder implements BuilderContract
      * @param  array|string  $columns
      * @param  string  $cursorName
      * @param  \Illuminate\Pagination\Cursor|string|null  $cursor
-     * @return \Illuminate\Contracts\Pagination\CursorPaginator
+     * @return \Illuminate\Pagination\CursorPaginator<int, TModel>
      */
     public function cursorPaginate($perPage = null, $columns = ['*'], $cursorName = 'cursor', $cursor = null)
     {
@@ -1871,7 +1905,7 @@ class Builder implements BuilderContract
      */
     protected function combineConstraints(array $constraints)
     {
-        return function ($builder) use ($constraints) {
+        return static function ($builder) use ($constraints) {
             foreach ($constraints as $constraint) {
                 $builder = $constraint($builder) ?? $builder;
             }
@@ -2152,6 +2186,16 @@ class Builder implements BuilderContract
     {
         $column = $column instanceof Expression ? $column->getValue($this->getGrammar()) : $column;
 
+        if (! is_null($alias = $this->getTableAlias())) {
+            if (! str_contains($column, '.')) {
+                return $alias.'.'.$column;
+            }
+
+            if (str_starts_with($column, $table = $this->model->getTable().'.')) {
+                return $alias.'.'.substr($column, strlen($table));
+            }
+        }
+
         return $this->model->qualifyColumn($column);
     }
 
@@ -2163,7 +2207,29 @@ class Builder implements BuilderContract
      */
     public function qualifyColumns($columns)
     {
-        return $this->model->qualifyColumns($columns);
+        $qualified = [];
+
+        foreach ($columns as $key => $column) {
+            $qualified[$key] = $this->qualifyColumn($column);
+        }
+
+        return $qualified;
+    }
+
+    /**
+     * Get the alias given to the query's table, if any.
+     *
+     * @return string|null
+     */
+    protected function getTableAlias()
+    {
+        if (! is_string($this->query->from)) {
+            return null;
+        }
+
+        $segments = preg_split('/\s+as\s+/i', $this->query->from);
+
+        return count($segments) > 1 ? array_last($segments) : null;
     }
 
     /**
@@ -2315,6 +2381,8 @@ class Builder implements BuilderContract
      * @param  string  $mixin
      * @param  bool  $replace
      * @return void
+     *
+     * @throws \ReflectionException
      */
     protected static function registerMixin($mixin, $replace)
     {

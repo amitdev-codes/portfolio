@@ -302,7 +302,7 @@ class QueryDataTable extends DataTableAbstract
             }
 
             if ($this->hasFilterColumn($columnName)) {
-                $keyword = $this->getColumnSearchKeyword($index, true);
+                $keyword = $this->getColumnSearchKeyword($index);
                 $this->applyFilterColumn($this->getBaseQueryBuilder(), $columnName, $keyword);
             } else {
                 $columnName = $this->resolveRelationColumn($columnName);
@@ -319,7 +319,7 @@ class QueryDataTable extends DataTableAbstract
         foreach ($columns as $index => $column) {
             $columnName = $this->getColumnName($index);
 
-            if (is_null($columnName) || ! ($column['searchable'] ?? false)) {
+            if (is_null($columnName) || ! $this->request->isColumnSearchable($index, false)) {
                 continue;
             }
 
@@ -390,7 +390,7 @@ class QueryDataTable extends DataTableAbstract
                 if ($type === 'date') {
                     try {
                         // column control replaces / with - on date value
-                        if ($mask && str_contains($mask, '/')) {
+                        if ($mask && str_contains((string) $mask, '/')) {
                             $value = str_replace('-', '/', $value);
                         }
 
@@ -432,14 +432,9 @@ class QueryDataTable extends DataTableAbstract
     /**
      * Get column keyword to use for search.
      */
-    protected function getColumnSearchKeyword(int $i, bool $raw = false): string
+    protected function getColumnSearchKeyword(int $i): string
     {
-        $keyword = $this->request->columnKeyword($i);
-        if ($raw || $this->request->isRegex($i)) {
-            return $keyword;
-        }
-
-        return $this->setupKeyword($keyword);
+        return $this->request->columnKeyword($i);
     }
 
     protected function getColumnNameByIndex(int $index): string
@@ -671,6 +666,7 @@ class QueryDataTable extends DataTableAbstract
                 } elseif (preg_match('/^([\w.]+)$/i', $column)) {
                     // Column without alias
                     [$table, $name] = str_contains($column, '.') ? explode('.', $column) : [null, $column];
+                    $name ??= '';
                     if ($name === '*') {
                         $selects['wildcards'][] = $table ?? '*';
                     } else {
@@ -820,11 +816,11 @@ class QueryDataTable extends DataTableAbstract
         $columns = (array) $this->request->searchPanes;
 
         foreach ($columns as $column => $values) {
-            if ($this->isBlacklisted($column)) {
+            if ($this->isBlacklisted($column) || ! isset($this->searchPanes[$column])) {
                 continue;
             }
 
-            if ($this->searchPanes[$column] && $callback = $this->searchPanes[$column]['builder']) {
+            if ($callback = $this->searchPanes[$column]['builder']) {
                 $callback($this->query, $values);
             } else {
                 $this->query->whereIn($column, $values);
@@ -839,7 +835,7 @@ class QueryDataTable extends DataTableAbstract
      */
     protected function resolveCallbackParameter(): array
     {
-        return [$this->query, $this->scoutSearched, fn ($column) => $this->resolveRelationColumn($column)];
+        return [$this->query, $this->scoutSearched, $this->resolveRelationColumn(...)];
     }
 
     /**
@@ -911,6 +907,9 @@ class QueryDataTable extends DataTableAbstract
     {
         /** @var string $sql */
         $sql = $this->config->get('datatables.nulls_last_sql', '%s %s NULLS LAST');
+
+        // Wrap column to prevent SQL injection when used in raw SQL.
+        $column = $this->wrap($column);
 
         return str_replace(
             [':column', ':direction'],

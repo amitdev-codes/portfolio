@@ -3,11 +3,13 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AboutInformationController;
 use App\Http\Controllers\Api\TechTalkDetailController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PortFolioInformation\PortfolioInformationController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\StatController;
 use App\Http\Controllers\TechTalkController;
 use App\Http\Controllers\UserManagement\PermissionController;
@@ -16,6 +18,7 @@ use App\Http\Controllers\UserManagement\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'landing'])->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 //Route::get('/tech-talk-details/{techTalk}', [TechTalkDetailController::class, 'show'])->name('tech-talk-details.show');
 Route::get('tech-talk-details/{tech_talk:slug}', [TechTalkDetailController::class, 'show'])
     ->name('tech-talks.public.show');
@@ -24,7 +27,7 @@ Route::middleware(['auth', 'verified'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
-        Route::inertia('dashboard', 'dashboard')->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('users', UserController::class)->names('users');
         Route::post('users/bulk-destroy', [UserController::class, 'bulkDestroy'])->name('users.bulk-destroy');
         Route::get('users/export', [UserController::class, 'exportUsers'])->name('users.export');

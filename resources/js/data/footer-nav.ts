@@ -1,15 +1,25 @@
-import { BookOpen, FolderGit2 } from 'lucide-react';
+import { Github, Linkedin, Twitter, Mail } from 'lucide-react';
 import type { NavItem } from '@/types';
 
 export const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
+        title: 'GitHub',
+        href: 'https://github.com/amitkumardev',
+        icon: Github,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'LinkedIn',
+        href: 'https://linkedin.com/in/amitkumardev',
+        icon: Linkedin,
+    },
+    {
+        title: 'Twitter',
+        href: 'https://twitter.com/amitkumardev',
+        icon: Twitter,
+    },
+    {
+        title: 'Email',
+        href: 'mailto:amit@amitkumar.dev',
+        icon: Mail,
     },
 ];

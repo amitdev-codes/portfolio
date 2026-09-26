@@ -8,6 +8,7 @@ use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response as BaseResponse;
 use Illuminate\Support\Traits\Macroable;
+use Inertia\DevTools\DevTools;
+use Inertia\Ssr\ConfiguresSsrRequests;
 use Inertia\Ssr\DisablesSsr;
 use Inertia\Ssr\ExcludesSsrPaths;
 use Inertia\Ssr\Gateway;
@@ -23,7 +26,7 @@ use Inertia\Support\Header;
 use Inertia\Support\SessionKey;
 use InvalidArgumentException;
 use LogicException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use UnitEnum;
 
@@ -102,12 +105,16 @@ class ResponseFactory
     {
         if (is_array($key)) {
             $this->sharedProps = array_merge($this->sharedProps, $key);
+            DevTools::recorder()?->propsShared(array_keys($key));
         } elseif ($key instanceof Arrayable) {
-            $this->sharedProps = array_merge($this->sharedProps, $key->toArray());
+            $resolved = $key->toArray();
+            $this->sharedProps = array_merge($this->sharedProps, $resolved);
+            DevTools::recorder()?->propsShared(array_keys($resolved));
         } elseif ($key instanceof ProvidesInertiaProperties) {
             $this->sharedProps = array_merge($this->sharedProps, [$key]);
         } else {
             Arr::set($this->sharedProps, $key, $value);
+            DevTools::recorder()?->propsShared([(string) $key]);
         }
     }
 
@@ -233,6 +240,20 @@ class ResponseFactory
     }
 
     /**
+     * Configure the HTTP request that is sent to the SSR server.
+     */
+    public function configureSsrRequestUsing(?Closure $callback = null): void
+    {
+        $gateway = app(Gateway::class);
+
+        if (! $gateway instanceof ConfiguresSsrRequests) {
+            throw new LogicException('The configured SSR gateway does not support configuring server-side rendering requests.');
+        }
+
+        $gateway->configureRequestUsing($callback);
+    }
+
+    /**
      * Create an optional property.
      */
     public function optional(callable $callback): OptionalProp
@@ -243,9 +264,9 @@ class ResponseFactory
     /**
      * Create a deferred property.
      */
-    public function defer(callable $callback, string $group = 'default'): DeferProp
+    public function defer(callable $callback, string $group = 'default', bool $rescue = false): DeferProp
     {
-        return new DeferProp($callback, $group);
+        return new DeferProp($callback, $group, $rescue);
     }
 
     /**
@@ -369,7 +390,7 @@ class ResponseFactory
             $props = [$props];
         }
 
-        return new Response(
+        $response = new Response(
             $component,
             $this->sharedProps,
             $props,
@@ -378,20 +399,24 @@ class ResponseFactory
             $this->encryptHistory ?? config('inertia.history.encrypt', false),
             $this->urlResolver,
         );
+
+        DevTools::recorder()?->pageRendering($component, $response, $this->sharedProps);
+
+        return $response;
     }
 
     /**
      * Create an Inertia location response.
      *
-     * @param  string|RedirectResponse  $url
+     * @param  string|SymfonyRedirectResponse  $url
      */
     public function location($url): SymfonyResponse
     {
         if (Request::inertia()) {
-            return BaseResponse::make('', 409, [Header::LOCATION => $url instanceof RedirectResponse ? $url->getTargetUrl() : $url]);
+            return BaseResponse::make('', 409, [Header::LOCATION => $url instanceof SymfonyRedirectResponse ? $url->getTargetUrl() : $url]);
         }
 
-        return $url instanceof RedirectResponse ? $url : Redirect::away($url);
+        return $url instanceof SymfonyRedirectResponse ? $url : Redirect::away($url);
     }
 
     /**

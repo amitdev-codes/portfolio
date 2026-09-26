@@ -142,6 +142,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
     // Get $rootPath based on $autoloadPath
     $rootPath = dirname($autoloadPath, 2);
+
     $input = new ArgvInput;
 
     $testSuite = TestSuite::getInstance(

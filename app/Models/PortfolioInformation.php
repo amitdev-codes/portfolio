@@ -28,6 +28,7 @@ class PortfolioInformation extends Model implements HasMedia
     protected $casts = [
         'stats' => 'array',
         'skills' => 'array',
+        'tech_stack' => 'array',
         'is_available' => 'boolean',
         'is_active' => 'boolean',
         'latitude' => 'decimal:7',

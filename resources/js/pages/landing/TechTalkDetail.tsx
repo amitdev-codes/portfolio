@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import { ArrowLeft, Calendar, Clock, ExternalLink, User } from 'lucide-react';
 
@@ -35,134 +36,169 @@ interface TechTalkDetail {
     screenshots: Screenshot[];
 }
 
-export default function TechTalkDetail({ techTalk }: { techTalk: TechTalkDetail }) {
+interface SEOData {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    type: string;
+    keywords: string;
+    twitter_card: string;
+    robots: string;
+    canonical: string;
+}
+
+export default function TechTalkDetail({ techTalk, seo }: { techTalk: TechTalkDetail; seo: SEOData }) {
     return (
-        <div className="min-h-screen bg-[#f8f7f4] font-sans text-slate-900">
-            <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
-                <Link
-                    href="/#blog"
-                    className="mb-10 inline-flex items-center gap-1 text-sm font-bold text-indigo-600"
-                >
-                    <ArrowLeft size={16} /> Back to Tech Talks
-                </Link>
+        <>
+            <Head>
+                <title>{seo.title}</title>
+                <meta name="description" content={seo.description} />
+                <meta name="keywords" content={seo.keywords} />
+                <meta name="robots" content={seo.robots} />
+                <link rel="canonical" href={seo.canonical} />
+                <meta property="og:type" content={seo.type} />
+                <meta property="og:url" content={seo.url} />
+                <meta property="og:title" content={seo.title} />
+                <meta property="og:description" content={seo.description} />
+                <meta property="og:image" content={seo.image} />
+                <meta property="og:site_name" content="Amit Kumar Dev" />
+                <meta name="twitter:card" content={seo.twitter_card} />
+                <meta name="twitter:url" content={seo.url} />
+                <meta name="twitter:title" content={seo.title} />
+                <meta name="twitter:description" content={seo.description} />
+                <meta name="twitter:image" content={seo.image} />
+                <meta property="article:published_time" content={techTalk.date ? new Date(techTalk.date).toISOString() : ''} />
+                <meta property="article:author" content="Amit Kumar" />
+                <meta property="article:section" content={techTalk.category} />
+            </Head>
+            <div className="min-h-screen bg-[#f8f7f4] font-sans text-slate-900">
+                <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
+                    <Link
+                        href="/#blog"
+                        className="mb-10 inline-flex items-center gap-1 text-sm font-bold text-indigo-600"
+                    >
+                        <ArrowLeft size={16} /> Back to Tech Talks
+                    </Link>
 
-                <span
-                    className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold"
-                    style={{
-                        backgroundColor: `${techTalk.categoryColor}1f`,
-                        color: techTalk.categoryColor,
-                    }}
-                >
-                    {techTalk.category}
-                </span>
+                    <span
+                        className="mb-4 inline-block rounded-full px-3 py-1 text-xs font-bold"
+                        style={{
+                            backgroundColor: `${techTalk.categoryColor}1f`,
+                            color: techTalk.categoryColor,
+                        }}
+                    >
+                        {techTalk.category}
+                    </span>
 
-                <h1 className="text-4xl leading-tight font-black text-slate-900 sm:text-5xl">
-                    {techTalk.title}
-                </h1>
+                    <h1 className="text-4xl leading-tight font-black text-slate-900 sm:text-5xl">
+                        {techTalk.title}
+                    </h1>
 
-                {techTalk.excerpt && (
-                    <p className="mt-4 text-lg leading-relaxed text-slate-500">
-                        {techTalk.excerpt}
-                    </p>
-                )}
-
-                <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-b border-slate-200 py-4 text-sm font-semibold text-slate-500">
-                    {techTalk.authorName && (
-                        <span className="flex items-center gap-1.5">
-                            <User size={14} /> {techTalk.authorName}
-                        </span>
+                    {techTalk.excerpt && (
+                        <p className="mt-4 text-lg leading-relaxed text-slate-500">
+                            {techTalk.excerpt}
+                        </p>
                     )}
-                    {techTalk.date && (
-                        <span className="flex items-center gap-1.5">
-                            <Calendar size={14} /> {techTalk.date}
-                        </span>
+
+                    <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-b border-slate-200 py-4 text-sm font-semibold text-slate-500">
+                        {techTalk.authorName && (
+                            <span className="flex items-center gap-1.5">
+                                <User size={14} /> {techTalk.authorName}
+                            </span>
+                        )}
+                        {techTalk.date && (
+                            <span className="flex items-center gap-1.5">
+                                <Calendar size={14} /> {techTalk.date}
+                            </span>
+                        )}
+                        {techTalk.readTime && (
+                            <span className="flex items-center gap-1.5">
+                                <Clock size={14} /> {techTalk.readTime} read
+                            </span>
+                        )}
+                    </div>
+
+                    {techTalk.videoLink && (
+                        <a
+                            href={techTalk.videoLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-8 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-indigo-700"
+                        >
+                            Watch the talk <ExternalLink size={14} />
+                        </a>
                     )}
-                    {techTalk.readTime && (
-                        <span className="flex items-center gap-1.5">
-                            <Clock size={14} /> {techTalk.readTime} read
-                        </span>
+
+                    {techTalk.content && (
+                        <div className="prose prose-slate mt-10 max-w-none whitespace-pre-wrap">
+                            {techTalk.content}
+                        </div>
+                    )}
+
+                    {techTalk.codeExamples.length > 0 && (
+                        <div className="mt-12">
+                            <h2 className="mb-6 text-2xl font-black text-slate-900">
+                                Code Examples
+                            </h2>
+                            <div className="space-y-8">
+                                {techTalk.codeExamples.map((example) => (
+                                    <div key={example.id}>
+                                        {example.title && (
+                                            <h3 className="mb-2 text-sm font-bold text-slate-700">
+                                                {example.title}
+                                            </h3>
+                                        )}
+                                        <pre className="overflow-x-auto rounded-2xl bg-[#18181f] p-5 text-sm leading-relaxed text-slate-100">
+                                            <code>{example.code}</code>
+                                        </pre>
+                                        {example.explanation && (
+                                            <p className="mt-2 text-sm text-slate-500">
+                                                {example.explanation}
+                                            </p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {techTalk.screenshots.length > 0 && (
+                        <div className="mt-12">
+                            <h2 className="mb-6 text-2xl font-black text-slate-900">
+                                Screenshots
+                            </h2>
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                {techTalk.screenshots.map((shot) => (
+                                    <figure key={shot.id}>
+                                        <img
+                                            src={shot.url}
+                                            alt={shot.caption ?? ''}
+                                            className="w-full rounded-2xl border border-slate-200"
+                                        />
+                                        {shot.caption && (
+                                            <figcaption className="mt-2 text-xs text-slate-500">
+                                                {shot.caption}
+                                            </figcaption>
+                                        )}
+                                    </figure>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {techTalk.sourceLink && (
+                        <a
+                            href={techTalk.sourceLink}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-12 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600"
+                        >
+                            View source / slides <ExternalLink size={14} />
+                        </a>
                     )}
                 </div>
-
-                {techTalk.videoLink && (
-                    <a
-                        href={techTalk.videoLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-8 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-indigo-700"
-                    >
-                        Watch the talk <ExternalLink size={14} />
-                    </a>
-                )}
-
-                {techTalk.content && (
-                    <div className="prose prose-slate mt-10 max-w-none whitespace-pre-wrap">
-                        {techTalk.content}
-                    </div>
-                )}
-
-                {techTalk.codeExamples.length > 0 && (
-                    <div className="mt-12">
-                        <h2 className="mb-6 text-2xl font-black text-slate-900">
-                            Code Examples
-                        </h2>
-                        <div className="space-y-8">
-                            {techTalk.codeExamples.map((example) => (
-                                <div key={example.id}>
-                                    {example.title && (
-                                        <h3 className="mb-2 text-sm font-bold text-slate-700">
-                                            {example.title}
-                                        </h3>
-                                    )}
-                                    <pre className="overflow-x-auto rounded-2xl bg-[#18181f] p-5 text-sm leading-relaxed text-slate-100">
-                                        <code>{example.code}</code>
-                                    </pre>
-                                    {example.explanation && (
-                                        <p className="mt-2 text-sm text-slate-500">
-                                            {example.explanation}
-                                        </p>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {techTalk.screenshots.length > 0 && (
-                    <div className="mt-12">
-                        <h2 className="mb-6 text-2xl font-black text-slate-900">
-                            Screenshots
-                        </h2>
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                            {techTalk.screenshots.map((shot) => (
-                                <figure key={shot.id}>
-                                    <img
-                                        src={shot.url}
-                                        alt={shot.caption ?? ''}
-                                        className="w-full rounded-2xl border border-slate-200"
-                                    />
-                                    {shot.caption && (
-                                        <figcaption className="mt-2 text-xs text-slate-500">
-                                            {shot.caption}
-                                        </figcaption>
-                                    )}
-                                </figure>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {techTalk.sourceLink && (
-                    <a
-                        href={techTalk.sourceLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-12 inline-flex items-center gap-1.5 text-sm font-bold text-indigo-600"
-                    >
-                        View source / slides <ExternalLink size={14} />
-                    </a>
-                )}
             </div>
-        </div>
+        </>
     );
 }

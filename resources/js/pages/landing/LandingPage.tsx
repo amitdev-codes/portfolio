@@ -1,3 +1,4 @@
+import { Head } from '@inertiajs/react';
 import { useLandingPage } from '@/hooks/useLandingPage';
 import AboutSection from './components/AboutSection';
 import ContactSection from './components/ContactSection';
@@ -57,16 +58,32 @@ interface AboutData {
     tech_stack: string[];
 }
 
+interface SEOData {
+    title: string;
+    description: string;
+    image: string;
+    url: string;
+    type: string;
+    keywords: string;
+    twitter_card: string;
+    robots: string;
+}
+
+
 export default function LandingPage({
     projects,
     hero,
     about,
     techTalks,
+    seo,
+    totalVisits, // Add total visits prop
 }: {
     projects: any;
     hero: HeroData;
     about: AboutData | null;
     techTalks: TechTalk[] | null;
+    seo: SEOData;
+    totalVisits: number; // Add total visits prop
 }) {
     const {
         isScrolled,
@@ -91,79 +108,101 @@ export default function LandingPage({
         : 'bg-transparent py-6';
 
     return (
-        <div
-            className={`min-h-screen ${bg} overflow-x-hidden font-sans transition-colors duration-500`}
-        >
+        <>
+            <Head>
+                <title>{seo.title}</title>
+                <meta name="description" content={seo.description} />
+                <meta name="keywords" content={seo.keywords} />
+                <meta name="robots" content={seo.robots} />
+                <link rel="canonical" href={seo.canonical} />
+                <meta property="og:type" content={seo.type} />
+                <meta property="og:url" content={seo.url} />
+                <meta property="og:title" content={seo.title} />
+                <meta property="og:description" content={seo.description} />
+                <meta property="og:image" content={seo.image} />
+                <meta property="og:site_name" content="Amit Kumar Dev" />
+                <meta name="twitter:card" content={seo.twitter_card} />
+                <meta name="twitter:url" content={seo.url} />
+                <meta name="twitter:title" content={seo.title} />
+                <meta name="twitter:description" content={seo.description} />
+                <meta name="twitter:image" content={seo.image} />
+            </Head>
             <div
-                ref={cursorRef}
-                className="pointer-events-none fixed z-999 h-3 w-3 rounded-full bg-indigo-600 mix-blend-multiply transition-all duration-150"
-                style={{ transform: 'translate(-50%, -50%)' }}
-            />
-            <Navbar
-                isScrolled={isScrolled}
-                darkMode={darkMode}
-                setDarkMode={setDarkMode}
-                downloadCV={downloadCV}
-                handleCursorHover={handleCursorHover}
-                navBg={navBg}
-            />
-            <HeroSection
-                hero={hero}
-                darkMode={darkMode}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-                bg={bg}
-                bgCard={bgCard}
-                borderColor={borderColor}
-                handleCursorHover={handleCursorHover}
-            />
-            <AboutSection
-                about={about}
-                darkMode={darkMode}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-                bg={bg}
-                bgCard={bgCard}
-                borderColor={borderColor}
-            />
-            <ProjectsSection
-                projects={projects}
-                bg={bg}
-                bgCard={bgCard}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-            />
-            <TechTalkSection
-                darkMode={darkMode}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-                bg={bg}
-                bgWhite={bgWhite}
-                handleCursorHover={handleCursorHover}
-                bgCard={bgCard}
-                borderColor={borderColor}
-                techTalks={techTalks}
-            />
-            <ContactSection
-                bgWhite={bgWhite}
-                darkMode={darkMode}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-                bg={bg}
-                bgCard={bgCard}
-                borderColor={borderColor}
-                handleCursorHover={handleCursorHover}
-            />
-            <FooterSection
-                darkMode={darkMode}
-                textPrimary={textPrimary}
-                textMuted={textMuted}
-                bg={bg}
-                bgWhite={bgWhite}
-                bgCard={bgCard}
-                borderColor={borderColor}
-                handleCursorHover={handleCursorHover}
-            />
-        </div>
+                className={`min-h-screen ${bg} overflow-x-hidden font-sans transition-colors duration-500`}
+            >
+                <div
+                    ref={cursorRef}
+                    className="pointer-events-none fixed z-999 h-3 w-3 rounded-full bg-indigo-600 mix-blend-multiply transition-all duration-150"
+                    style={{ transform: 'translate(-50%, -50%)' }}
+                />
+                <Navbar
+                    isScrolled={isScrolled}
+                    darkMode={darkMode}
+                    setDarkMode={setDarkMode}
+                    downloadCV={downloadCV}
+                    handleCursorHover={handleCursorHover}
+                    navBg={navBg}
+                />
+                <HeroSection
+                    hero={hero}
+                    darkMode={darkMode}
+                    textPrimary={textPrimary}
+                    textMuted={textMuted}
+                    bg={bg}
+                    bgCard={bgCard}
+                    borderColor={borderColor}
+                    handleCursorHover={handleCursorHover}
+                />
+                <AboutSection
+                    about={about}
+                    darkMode={darkMode}
+                    textPrimary={textPrimary}
+                    textMuted={textMuted}
+                    bg={bg}
+                    bgCard={bgCard}
+                    borderColor={borderColor}
+                />
+                <ProjectsSection
+                    projects={projects}
+                    bg={bg}
+                    bgCard={bgCard}
+                    textPrimary={textPrimary}
+                    textMuted={textMuted}
+                />
+                <TechTalkSection
+                    darkMode={darkMode}
+                    textPrimary={textPrimary}
+                    textMuted={textMuted}
+                    bg={bg}
+                    bgWhite={bgWhite}
+                    handleCursorHover={handleCursorHover}
+                    bgCard={bgCard}
+                    borderColor={borderColor}
+                    techTalks={techTalks}
+                />
+                <ContactSection
+                    bgWhite={bgWhite}
+                    darkMode={darkMode}
+                    textPrimary={textPrimary}
+                    textMuted={textMuted}
+                    bg={bg}
+                    bgCard={bgCard}
+                    borderColor={borderColor}
+                    handleCursorHover={handleCursorHover}
+                />
+<FooterSection
+    darkMode={darkMode}
+    textPrimary={textPrimary}
+    textMuted={textMuted}
+    bg={bg}
+    bgWhite={bgWhite}
+    bgCard={bgCard}
+    borderColor={borderColor}
+    handleCursorHover={handleCursorHover}
+    totalVisits={totalVisits} // Pass total visits to footer
+/>
+
+            </div>
+        </>
     );
 }

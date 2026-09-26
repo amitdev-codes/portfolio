@@ -19,11 +19,15 @@ import { dashboard } from '@/routes/admin';
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar
+            collapsible="icon"
+            variant="inset"
+            className="border-none bg-gradient-to-b from-rose-600 via-fuchsia-700 to-indigo-800 text-white shadow-lg dark:from-rose-800 dark:via-fuchsia-900 dark:to-indigo-950"
+        >
+            <SidebarHeader className="bg-transparent">
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton size="lg" asChild className="text-white hover:bg-white/10 hover:text-white">
                             <Link href={dashboard()} prefetch>
                                 <AppLogo />
                             </Link>
@@ -32,11 +36,11 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="bg-transparent">
                 <NavMain items={mainNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className="border-t border-white/15 bg-transparent">
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>

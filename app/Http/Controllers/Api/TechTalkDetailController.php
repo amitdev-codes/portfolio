@@ -23,6 +23,14 @@ class TechTalkDetailController extends Controller
         abort_unless($techTalk->is_published, 404);
 
         $techTalk->load(['codeExamples', 'screenshots']);
+        
+        // Prepare SEO data
+        $seoTitle = $techTalk->seo_title ?: $techTalk->title . ' | Amit Kumar Dev';
+        $seoDescription = $techTalk->seo_metatags ?: $techTalk->excerpt ?: 'Read ' . $techTalk->title . ' by Amit Kumar - Tech talks and presentations on software development.';
+        $seoImage = $techTalk->cover_image ?: asset('images/og-default.png');
+        $seoUrl = request()->fullUrl();
+        $seoKeywords = $techTalk->category ? $techTalk->category . ', ' . $techTalk->title . ', Tech Talk, Amit Kumar' : 'Tech Talk, Amit Kumar, Software Development';
+
         return Inertia::render('landing/TechTalkDetail', [
             'techTalk' => [
                 'id' => $techTalk->id,
@@ -48,9 +56,20 @@ class TechTalkDetailController extends Controller
                 ]),
                 'screenshots' => $techTalk->screenshots->map(fn ($shot) => [
                     'id' => $shot->id,
-                    'url' => $shot->url, // uses the accessor on TechTalkScreenshot
+                    'url' => $shot->url,
                     'caption' => $shot->caption,
                 ]),
+            ],
+            'seo' => [
+                'title' => $seoTitle,
+                'description' => $seoDescription,
+                'image' => $seoImage,
+                'url' => $seoUrl,
+                'type' => 'article',
+                'keywords' => $seoKeywords,
+                'twitter_card' => 'summary_large_image',
+                'robots' => 'index, follow',
+                'canonical' => $seoUrl,
             ],
         ]);
     }

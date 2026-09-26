@@ -2,12 +2,8 @@
 
 namespace Illuminate\Queue;
 
-use Illuminate\Bus\DebounceLock;
-use Illuminate\Bus\UniqueLock;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Queue\Events\JobAttempted;
 use Illuminate\Queue\Events\JobExceptionOccurred;
 use Illuminate\Queue\Events\JobProcessed;
@@ -73,6 +69,46 @@ class SyncQueue extends Queue implements QueueContract
     }
 
     /**
+     * Get the number of jobs across every queue.
+     *
+     * @return int
+     */
+    public function totalSize()
+    {
+        return 0;
+    }
+
+    /**
+     * Get the number of pending jobs across every queue.
+     *
+     * @return int
+     */
+    public function totalPendingSize()
+    {
+        return 0;
+    }
+
+    /**
+     * Get the number of delayed jobs across every queue.
+     *
+     * @return int
+     */
+    public function totalDelayedSize()
+    {
+        return 0;
+    }
+
+    /**
+     * Get the number of reserved jobs across every queue.
+     *
+     * @return int
+     */
+    public function totalReservedSize()
+    {
+        return 0;
+    }
+
+    /**
      * Get the pending jobs for the given queue.
      *
      * @param  string|null  $queue
@@ -106,6 +142,36 @@ class SyncQueue extends Queue implements QueueContract
     }
 
     /**
+     * Get all pending jobs across every queue.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function allPendingJobs(): Collection
+    {
+        return new Collection;
+    }
+
+    /**
+     * Get all delayed jobs across every queue.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function allDelayedJobs(): Collection
+    {
+        return new Collection;
+    }
+
+    /**
+     * Get all reserved jobs across every queue.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function allReservedJobs(): Collection
+    {
+        return new Collection;
+    }
+
+    /**
      * Get the creation timestamp of the oldest pending job, excluding delayed jobs.
      *
      * @param  string|null  $queue
@@ -130,21 +196,7 @@ class SyncQueue extends Queue implements QueueContract
     {
         if ($this->shouldDispatchAfterCommit($job) &&
             $this->container->bound('db.transactions')) {
-            if ($job instanceof ShouldBeUnique) {
-                $this->container->make('db.transactions')->addCallbackForRollback(
-                    function () use ($job) {
-                        (new UniqueLock($this->container->make(Cache::class)))->release($job);
-                    }
-                );
-            }
-
-            if (! empty($job->debounceOwner ?? '')) {
-                $this->container->make('db.transactions')->addCallbackForRollback(
-                    function () use ($job) {
-                        (new DebounceLock($this->container->make(Cache::class)))->release($job, $job->debounceOwner ?? '');
-                    }
-                );
-            }
+            $this->registerRollbackCallbacksForJobsThatDispatchAfterCommit($job);
 
             return $this->container->make('db.transactions')->addCallback(
                 fn () => $this->executeJob($job, $data, $queue)
@@ -227,7 +279,7 @@ class SyncQueue extends Queue implements QueueContract
      * Raise the job attempted event.
      *
      * @param  \Illuminate\Contracts\Queue\Job  $job
-     * @param  \Throwable|null  $exception
+     * @param  \Throwable|null  $exceptionOccurred
      * @return void
      */
     protected function raiseJobAttemptedEvent(Job $job, ?Throwable $exceptionOccurred = null)

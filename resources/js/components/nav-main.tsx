@@ -25,7 +25,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-white/60">Platform</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) =>
                     // ✅ Has children → render collapsible group
@@ -42,9 +42,10 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                                 asChild
                                 isActive={item.href ? isCurrentUrl(item.href) : false}
                                 tooltip={{ children: item.title }}
+                                className="text-white/80 hover:text-white hover:bg-white/10 data-[active=true]:bg-white/20 data-[active=true]:text-white"
                             >
                                 <Link href={item.href ?? '#'} prefetch>
-                                    {item.icon && <item.icon />}
+                                    {item.icon && <item.icon className="text-white/70" />}
                                     <span>{item.title}</span>
                                 </Link>
                             </SidebarMenuButton>
@@ -63,22 +64,20 @@ function CollapsibleNavItem({
     item: NavItem;
     isCurrentUrl: (href: string) => boolean;
 }) {
-
-
     // Auto-open if any child is active
-   const hasActiveChild =
-    item.items?.some((c) => {
-        if (!c.href){
-        return false;
-        } 
+    const hasActiveChild =
+        item.items?.some((c) => {
+            if (!c.href){
+                return false;
+            }
 
-    const hrefStr =
-      typeof c.href === "string"
-        ? c.href
-        : c.href.url; // from UrlMethodPair { url: string; method: string }
+            const hrefStr =
+                typeof c.href === "string"
+                    ? c.href
+                    : c.href.url; // from UrlMethodPair { url: string; method: string }
 
-    return isCurrentUrl(hrefStr);
-      }) ?? false;
+            return isCurrentUrl(hrefStr);
+          }) ?? false;
     const [open, setOpen] = useState(hasActiveChild);
 
     return (
@@ -86,33 +85,37 @@ function CollapsibleNavItem({
             <SidebarMenuItem>
                 {/* Parent trigger — no href, so no Link */}
                 <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={{ children: item.title }}>
-                        {item.icon && <item.icon />}
+                    <SidebarMenuButton
+                        tooltip={{ children: item.title }}
+                        className="text-white/80 hover:text-white hover:bg-white/10"
+                    >
+                        {item.icon && <item.icon className="text-white/70" />}
                         <span>{item.title}</span>
-                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 text-white/50" />
                     </SidebarMenuButton>
                 </CollapsibleTrigger>
 
                 <CollapsibleContent>
                     <SidebarMenuSub>
                         {item.items?.map((child) => (
-                            <SidebarMenuSubItem key={child.title}>
+                            <sidebarMenuSubItem key={child.title}>
                                 <SidebarMenuSubButton
                                     asChild
-                                      isActive={
+                                    isActive={
                                         child.href
                                         ? isCurrentUrl(
                                             typeof child.href === "string" ? child.href : child.href.url
                                             )
                                         : false
                                     }
-                                   >
+                                    className="text-white/80 hover:text-white hover:bg-white/10 data-[active=true]:bg-white/20 data-[active=true]:text-white"
+                                >
                                     <Link href={child.href ?? '#'} prefetch>
-                                        {child.icon && <child.icon />}
-                                        <span>{child.title}</span>
+                                        {child.icon && <child.icon className="text-white/60" />}
+                                        <span className="text-white/80">{child.title}</span>
                                     </Link>
                                 </SidebarMenuSubButton>
-                            </SidebarMenuSubItem>
+                            </sidebarMenuSubItem>
                         ))}
                     </SidebarMenuSub>
                 </CollapsibleContent>
