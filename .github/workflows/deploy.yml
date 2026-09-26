@@ -25,8 +25,11 @@ jobs:
 
       - name: Build Frontend Assets (Yarn)
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo php84-ctype php84-xml php84-dom php84-simplexml php84-xmlwriter php84-session php84-pdo php84-curl \
+          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "
+            apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo php84-ctype php84-xml php84-dom php84-simplexml php84-xmlwriter php84-session php84-pdo php84-curl php84-bcmath php84-intl php84-pdo_mysql \
             && ln -sf /usr/bin/php84 /usr/bin/php \
+            && cp .env.example .env \
+            && php artisan key:generate --ansi \
             && yarn install && yarn build"
 
       - name: Fix file ownership after build
