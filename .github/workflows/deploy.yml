@@ -23,17 +23,15 @@ jobs:
       - name: Fix file ownership after composer
         run: sudo chown -R $(id -u):$(id -g) .
 
-      - name: Build Frontend Assets (Yarn)
+      - name: Verify build assets exist
         run: |
-          docker run --rm -v ${{ github.workspace }}:/app -w /app node:24-alpine sh -c "
-            apk add --no-cache php84-cli php84-tokenizer php84-mbstring php84-openssl php84-phar php84-fileinfo php84-ctype php84-xml php84-dom php84-simplexml php84-xmlwriter php84-session php84-pdo php84-curl php84-bcmath php84-intl php84-pdo_mysql \
-            && ln -sf /usr/bin/php84 /usr/bin/php \
-            && cp .env.example .env \
-            && php artisan key:generate --ansi \
-            && yarn install && yarn build"
-
-      - name: Fix file ownership after build
-        run: sudo chown -R $(id -u):$(id -g) .
+          if [ ! -d "public/build" ] || [ -z "$(ls -A public/build 2>/dev/null)" ]; then
+            echo "ERROR: public/build is missing or empty."
+            echo "Run 'yarn build' locally and commit the public/build folder before pushing to main."
+            exit 1
+          fi
+          echo "Found committed build assets:"
+          ls -la public/build
 
       - name: Package build for transfer
         run: |
@@ -63,13 +61,12 @@ jobs:
           script: |
             mkdir -p ${{ secrets.DEPLOY_PATH }}
             cd ${{ secrets.DEPLOY_PATH }} && php artisan down || true
-            rm -rf ${{ secrets.DEPLOY_PATH }}/public/build
             tar -xzf ~/deploy.tar.gz -C ${{ secrets.DEPLOY_PATH }}
             rm -f ~/deploy.tar.gz
             cd ${{ secrets.DEPLOY_PATH }}
             php artisan package:discover --ansi
-            php artisan migrate --force
             php artisan config:clear
+            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
