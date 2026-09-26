@@ -14,7 +14,7 @@ class UpdateTechTalkRequest extends FormRequest
 
     public function rules(): array
     {
-        $techTalkId = $this->route('techTalk')->id;
+        $techTalkId = $this->route('tech_talk')->id;
 
         return [
             'number' => ['nullable', 'integer', 'min:0'],

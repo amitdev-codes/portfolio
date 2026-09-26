@@ -23,12 +23,12 @@ export function AppSidebarHeader({
     const { auth } = usePage().props as {
         auth: { user: { name: string; avatar?: string } };
     };
-    const { appearance, updateAppearance } = useAppearance();
+    const { resolvedAppearance, updateAppearance } = useAppearance();
     const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
     // Simplified Dark/Light toggle handler
     const toggleAppearance = () => {
-        updateAppearance(appearance === 'light' ? 'dark' : 'light');
+        updateAppearance(resolvedAppearance === 'light' ? 'dark' : 'light');
     };
 
     // Profile actions
@@ -94,12 +94,12 @@ export function AppSidebarHeader({
                     onClick={toggleAppearance}
                     className="flex h-9 w-9 items-center justify-center rounded-lg border transition-all hover:border-neutral-200 hover:bg-accent data-[state=active]:bg-accent dark:border-neutral-700 dark:hover:border-neutral-600"
                     aria-label={
-                        appearance === 'light'
+                        resolvedAppearance === 'light'
                             ? 'Switch to dark mode'
                             : 'Switch to light mode'
                     }
                 >
-                    {appearance === 'light' ? (
+                    {resolvedAppearance === 'light' ? (
                         <Moon className="h-4 w-4" />
                     ) : (
                         <Sun className="h-4 w-4" />
@@ -131,7 +131,7 @@ export function AppSidebarHeader({
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={handleLogout}
-                            className="cursor-pointer focus:bg-destructive"
+                            className="cursor-pointer text-muted-foreground focus:bg-accent focus:text-accent-foreground"
                         >
                             <LogOut className="mr-2 h-4 w-4" />
                             Logout

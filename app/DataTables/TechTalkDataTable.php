@@ -14,6 +14,7 @@ class TechTalkDataTable extends BaseDataTable
     {
         return TechTalk::select(
             'id',
+            'number',
             'category',
             'category_color',
             'title',
@@ -26,12 +27,13 @@ class TechTalkDataTable extends BaseDataTable
             'source_link',
             'is_published',
             'slug',
-            'created_at');
+            'created_at'
+        );
     }
 
     protected function searchableColumns(): array
     {
-        return ['category'];
+        return ['title', 'category'];
     }
 
     protected function filterableColumns(): array
@@ -50,18 +52,19 @@ class TechTalkDataTable extends BaseDataTable
     {
         return [
             'id' => $techTalk->id,
+            'number' => $techTalk->number,
             'category' => $techTalk->category,
             'category_color' => $techTalk->category_color,
             'title' => $techTalk->title,
             'excerpt' => $techTalk->excerpt,
-            'date' => $techTalk->date,
+            'date' => optional($techTalk->date)?->format('Y-m-d') ?? $techTalk->date,
             'read_time' => $techTalk->read_time,
             'sort_order' => $techTalk->sort_order,
             'cover_image' => $techTalk->cover_image,
             'video_link' => $techTalk->video_link,
             'source_link' => $techTalk->source_link,
             'is_published' => $techTalk->is_published,
-            'slug' => $techTalk->is_publislugshed,
+            'slug' => $techTalk->slug,
             'created_at' => $techTalk->created_at->format('Y-m-d H:i'),
         ];
     }

@@ -46,7 +46,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
                             >
                                 <Link href={item.href ?? '#'} prefetch>
                                     {item.icon && <item.icon className="text-white/70" />}
-                                    <span>{item.title}</span>
+                                    <span className="font-semibold">{item.title}</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
@@ -87,10 +87,10 @@ function CollapsibleNavItem({
                 <CollapsibleTrigger asChild>
                     <SidebarMenuButton
                         tooltip={{ children: item.title }}
-                        className="text-white/80 hover:text-white hover:bg-white/10"
+                        className="font-semibold text-white/80 hover:bg-white/10 hover:text-white"
                     >
                         {item.icon && <item.icon className="text-white/70" />}
-                        <span>{item.title}</span>
+                        <span className="font-semibold">{item.title}</span>
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 text-white/50" />
                     </SidebarMenuButton>
                 </CollapsibleTrigger>
@@ -98,7 +98,7 @@ function CollapsibleNavItem({
                 <CollapsibleContent>
                     <SidebarMenuSub>
                         {item.items?.map((child) => (
-                            <sidebarMenuSubItem key={child.title}>
+                            <SidebarMenuSubItem key={child.title}>
                                 <SidebarMenuSubButton
                                     asChild
                                     isActive={
@@ -112,10 +112,10 @@ function CollapsibleNavItem({
                                 >
                                     <Link href={child.href ?? '#'} prefetch>
                                         {child.icon && <child.icon className="text-white/60" />}
-                                        <span className="text-white/80">{child.title}</span>
+                                        <span className="font-semibold text-white/90">{child.title}</span>
                                     </Link>
                                 </SidebarMenuSubButton>
-                            </sidebarMenuSubItem>
+                            </SidebarMenuSubItem>
                         ))}
                     </SidebarMenuSub>
                 </CollapsibleContent>

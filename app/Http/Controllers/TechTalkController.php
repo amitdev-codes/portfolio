@@ -41,9 +41,7 @@ class TechTalkController extends Controller
 
     public function show(TechTalk $techTalk)
     {
-        $techTalk->load('media');
-
-        return view('tech_talks.show', compact('techTalk'));
+        return redirect()->route('admin.tech-talks.edit', $techTalk);
     }
 
     public function edit(TechTalk $techTalk)
@@ -53,6 +51,7 @@ class TechTalkController extends Controller
         return Inertia::render('tech_talks/TechTalkForm', [
             'techTalk' => [
                 ...$techTalk->toArray(),
+                'date' => optional($techTalk->date)?->format('Y-m-d'),
                 'cover_image' => optional($techTalk->getFirstMedia('cover_image'))->getUrl(),
             ],
         ]);

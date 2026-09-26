@@ -1,6 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 import AppLogoIcon from '@/components/app-logo-icon';
-import { home } from '@/routes';
 import type { AuthLayoutProps } from '@/types';
 
 const HERO_IMAGE =
@@ -14,7 +13,7 @@ export default function AuthSplitLayout({
     const { name } = usePage().props;
 
     return (
-        <div className="relative grid h-dvh grid-cols-1 lg:grid-cols-2">
+        <div className="relative grid min-h-dvh grid-cols-1 lg:h-dvh lg:grid-cols-2 lg:overflow-hidden">
             {/* Left — image panel */}
             <div className="relative hidden lg:flex">
                 <img
@@ -26,12 +25,12 @@ export default function AuthSplitLayout({
                 <div className="absolute inset-0 bg-black/10" />
 
                 <div className="relative flex h-full flex-col justify-between p-12 text-white">
-                    <div className="flex items-center gap-2 text-lg font-semibold">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
-                            <AppLogoIcon className="h-5 w-5" />
+                    <Link href="/" className="flex items-center gap-3 text-lg font-semibold">
+                        <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-white/15 ring-1 ring-white/25">
+                            <AppLogoIcon className="h-11 w-11" alt={String(name ?? 'Logo')} />
                         </div>
                         {name}
-                    </div>
+                    </Link>
 
                     <div className="max-w-md">
                         <h2 className="text-3xl font-bold leading-tight">
@@ -63,35 +62,24 @@ export default function AuthSplitLayout({
                 </div>
             </div>
 
-            {/* Right — form panel */}
-            <div className="flex items-center justify-center bg-background p-6 sm:p-10 lg:p-14">
-                <div className="w-full max-w-md">
-                    {/* Mobile logo */}
-                    <div className="mb-8 text-center lg:hidden">
-                        <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-rose-600 to-indigo-700 shadow-lg shadow-indigo-500/25 mx-auto">
-                            <AppLogoIcon className="h-8 w-8 fill-white" />
-                        </div>
-                        <h1 className="mt-4 text-2xl font-bold text-foreground">{name}</h1>
-                        <p className="mt-1 text-sm text-muted-foreground">Admin Dashboard</p>
+            {/* Right — form panel (vertically & horizontally centered) */}
+            <div className="flex min-h-dvh items-center justify-center overflow-y-auto bg-background px-6 py-10 sm:px-10 lg:min-h-0 lg:h-full lg:px-14">
+                <div className="my-auto w-full max-w-md">
+                    <div className="mb-8 text-center">
+                        {/*<h1 className="text-2xl font-bold text-foreground">{name}</h1>*/}
+                        {/*<p className="mt-1 text-sm text-muted-foreground">PortFolio</p>*/}
                     </div>
 
-                    {/* Desktop heading */}
-                    <div className="mb-8 hidden lg:block">
-                        <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+                    <div className="mb-6 text-center">
+                        <h2 className="text-xl font-bold text-foreground">{title}</h2>
                         <p className="mt-1 text-sm text-muted-foreground">{description}</p>
                     </div>
 
-                    {/* Mobile heading */}
-                    <div className="mb-8 text-center lg:hidden">
-                        <h1 className="text-xl font-bold text-foreground">{title}</h1>
-                        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-                    </div>
-
-                    <div className="rounded-2xl border border-slate-200/50 bg-white/80 dark:border-slate-700/50 dark:bg-slate-900/80 backdrop-blur-sm shadow-xl p-8 sm:p-10">
+                    <div className="rounded-2xl border border-border bg-card p-8 shadow-xl sm:p-10">
                         {children}
                     </div>
 
-                    <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
+                    <p className="mt-6 text-center text-xs text-muted-foreground">
                         © {new Date().getFullYear()} {name}. All rights reserved.
                     </p>
                 </div>

@@ -324,7 +324,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 export const edit = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -339,7 +339,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 edit.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -372,7 +372,7 @@ edit.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number | 
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 edit.get = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -382,7 +382,7 @@ edit.get = (args: { tech_talk: number | { id: number } } | [tech_talk: number | 
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 edit.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -392,7 +392,7 @@ edit.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number |
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 const editForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -402,7 +402,7 @@ const editForm = (args: { tech_talk: number | { id: number } } | [tech_talk: num
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 editForm.get = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -412,7 +412,7 @@ editForm.get = (args: { tech_talk: number | { id: number } } | [tech_talk: numbe
 
 /**
 * @see \App\Http\Controllers\TechTalkController::edit
-* @see app/Http/Controllers/TechTalkController.php:49
+* @see app/Http/Controllers/TechTalkController.php:47
 * @route '/admin/tech-talks/{tech_talk}/edit'
 */
 editForm.head = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -429,7 +429,7 @@ edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 export const update = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -444,7 +444,7 @@ update.definition = {
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 update.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -477,7 +477,7 @@ update.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number 
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 update.put = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -487,7 +487,7 @@ update.put = (args: { tech_talk: number | { id: number } } | [tech_talk: number 
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 update.patch = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
@@ -497,7 +497,7 @@ update.patch = (args: { tech_talk: number | { id: number } } | [tech_talk: numbe
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 const updateForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -512,7 +512,7 @@ const updateForm = (args: { tech_talk: number | { id: number } } | [tech_talk: n
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 updateForm.put = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -527,7 +527,7 @@ updateForm.put = (args: { tech_talk: number | { id: number } } | [tech_talk: num
 
 /**
 * @see \App\Http\Controllers\TechTalkController::update
-* @see app/Http/Controllers/TechTalkController.php:61
+* @see app/Http/Controllers/TechTalkController.php:60
 * @route '/admin/tech-talks/{tech_talk}'
 */
 updateForm.patch = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -544,7 +544,7 @@ update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\TechTalkController::destroy
-* @see app/Http/Controllers/TechTalkController.php:82
+* @see app/Http/Controllers/TechTalkController.php:81
 * @route '/admin/tech-talks/{tech_talk}'
 */
 export const destroy = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -559,7 +559,7 @@ destroy.definition = {
 
 /**
 * @see \App\Http\Controllers\TechTalkController::destroy
-* @see app/Http/Controllers/TechTalkController.php:82
+* @see app/Http/Controllers/TechTalkController.php:81
 * @route '/admin/tech-talks/{tech_talk}'
 */
 destroy.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
@@ -592,7 +592,7 @@ destroy.url = (args: { tech_talk: number | { id: number } } | [tech_talk: number
 
 /**
 * @see \App\Http\Controllers\TechTalkController::destroy
-* @see app/Http/Controllers/TechTalkController.php:82
+* @see app/Http/Controllers/TechTalkController.php:81
 * @route '/admin/tech-talks/{tech_talk}'
 */
 destroy.delete = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
@@ -602,7 +602,7 @@ destroy.delete = (args: { tech_talk: number | { id: number } } | [tech_talk: num
 
 /**
 * @see \App\Http\Controllers\TechTalkController::destroy
-* @see app/Http/Controllers/TechTalkController.php:82
+* @see app/Http/Controllers/TechTalkController.php:81
 * @route '/admin/tech-talks/{tech_talk}'
 */
 const destroyForm = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -617,7 +617,7 @@ const destroyForm = (args: { tech_talk: number | { id: number } } | [tech_talk: 
 
 /**
 * @see \App\Http\Controllers\TechTalkController::destroy
-* @see app/Http/Controllers/TechTalkController.php:82
+* @see app/Http/Controllers/TechTalkController.php:81
 * @route '/admin/tech-talks/{tech_talk}'
 */
 destroyForm.delete = (args: { tech_talk: number | { id: number } } | [tech_talk: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

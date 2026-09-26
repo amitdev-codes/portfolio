@@ -42,15 +42,14 @@ export default function Index({
         {
             key: 'heading_main',
             header: 'Heading',
-            render: (row?: AboutInformation) =>
-                row ? (
+            render: (_value, row) => (
                     <div>
                         {row.heading_main}{' '}
                         <span className="font-medium text-blue-600">
                             {row.heading_highlight}
                         </span>
                     </div>
-                ) : null,
+                ),
         },
         {
             key: 'experience_heading',
@@ -63,18 +62,17 @@ export default function Index({
         {
             key: 'is_active',
             header: 'Status',
-            render: (row?: AboutInformation) =>
-                row ? (
+            render: (value) => (
                     <span
                         className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            row.is_active
+                            value
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-red-100 text-red-700'
                         }`}
                     >
-                        {row.is_active ? 'Active' : 'Inactive'}
+                        {value ? 'Active' : 'Inactive'}
                     </span>
-                ) : null,
+                ),
             size: 100,
         },
         {

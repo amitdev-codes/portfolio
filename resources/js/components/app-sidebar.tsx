@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -14,7 +13,6 @@ import {
 } from '@/components/ui/sidebar';
 
 import { mainNavItems } from '@/data/admin-nav';
-import { footerNavItems } from '@/data/footer-nav';
 import { dashboard } from '@/routes/admin';
 
 export function AppSidebar() {
@@ -41,7 +39,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter className="border-t border-white/15 bg-transparent">
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

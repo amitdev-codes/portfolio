@@ -27,6 +27,7 @@ export interface Media {
 
 interface TechTalk {
     id?: number;
+    number: number;
     category: string;
     category_color: string;
     title: string;
@@ -46,15 +47,24 @@ interface Props {
     techTalk?: TechTalk;
 }
 
+function toDateInputValue(value?: string | null): string {
+    if (!value) {
+        return '';
+    }
+
+    return value.includes('T') ? value.slice(0, 10) : value;
+}
+
 export default function TechTalkForm({ techTalk }: Props) {
     const { data, setData, processing, errors } = useForm<TechTalk>({
+        number: techTalk?.number ?? 0,
         category: techTalk?.category || '',
         category_color: techTalk?.category_color || '',
         title: techTalk?.title || '',
         excerpt: techTalk?.excerpt || '',
-        date: techTalk?.date || '',
+        date: toDateInputValue(techTalk?.date),
         read_time: techTalk?.read_time || '',
-        sort_order: techTalk?.sort_order || 0,
+        sort_order: techTalk?.sort_order ?? 0,
         video_link: techTalk?.video_link || '',
         source_link: techTalk?.source_link || '',
         is_published: techTalk?.is_published || false,
@@ -150,6 +160,24 @@ export default function TechTalkForm({ techTalk }: Props) {
                                         required
                                     />
 
+                                    <NumberField
+                                        name="number"
+                                        label="Talk Number (#)"
+                                        value={data.number}
+                                        onChange={formFieldOnChange}
+                                        error={errors.number}
+                                        min={0}
+                                    />
+
+                                    <NumberField
+                                        name="sort_order"
+                                        label="Sort Order"
+                                        value={data.sort_order}
+                                        onChange={formFieldOnChange}
+                                        error={errors.sort_order}
+                                        min={0}
+                                    />
+
                                     <InputField
                                         name="category"
                                         label="Category"
@@ -183,14 +211,6 @@ export default function TechTalkForm({ techTalk }: Props) {
                                         onChange={formFieldOnChange}
                                         error={errors.read_time}
                                         unit="min"
-                                    />
-
-                                    <NumberField
-                                        name="sort_order"
-                                        label="Sort Order"
-                                        value={data.sort_order}
-                                        onChange={formFieldOnChange}
-                                        error={errors.sort_order}
                                     />
 
                                     <InputField

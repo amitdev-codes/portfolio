@@ -25,8 +25,6 @@ export default function Login({
 }: Props) {
     return (
         <>
-            <Head title="Log in" />
-
             <Form
                 {...store.form()}
                 resetOnSuccess={['password']}
